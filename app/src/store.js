@@ -13,6 +13,8 @@ export default class Store{
     this.messages = new OrderedMap();
     this.channels = new OrderedMap();
     this.activeChannelId = null;
+    
+    // Current logged in user
     this.user = {
       _id: '1',
       name: 'Xuan',
@@ -20,7 +22,19 @@ export default class Store{
     }
   }
 
-  searchUsers(search = ''){
+  addUserToChannel(channelId, userId) {
+    const channel = this.channels.get(channelId);
+
+    if(channel) {
+      channel.members = channel.members.set(userId, true);
+
+      this.channels = this.channels.set(channelId, channel);
+
+      this.update();
+    }
+  }
+
+  searchUsers(search = '') {
     let searchItems = new OrderedMap();
     if(_.trim(search).length){
       users.filter((user) => {
@@ -28,44 +42,48 @@ export default class Store{
         const userId = _.get(user, '_id');
 
         if(_.includes(name, search)){
-            searchItems = searchItems.set(userId, user);
+          searchItems = searchItems.set(userId, user);
         }
       })
     }
     return searchItems.valueSeq();
   }
 
-  onCreateNewChannel(channel = {}){
+  onCreateNewChannel(channel = {}) {
     console.log('New channel:', channel);
     const channelId = _.get(channel, '_id');
     this.addChannel(channelId, channel);
     this.setActiveChannelId(channelId);
   }
 
-  getCurrentUser(){
+  getCurrentUser() {
     return this.user;
   }
 
-  setActiveChannelId(id){
+  setActiveChannelId(id) {
     this.activeChannelId = id;
 
     this.update();
   }
 
-  getActiveChannel(){
+  getActiveChannel() {
     const channel = this.activeChannelId ? this.channels.get(this.activeChannelId) : this.channels.first();
 
     return channel;
   }
 
-  addMessage(id, message = {}){
+  addMessage(id, message = {}) {
     this.messages = this.messages.set(`${id}`, message);
 
     const channelId = _.get(message, 'channelId');
 
     if(channelId){
         
-      const channel = this.channels.get(channelId);
+      let channel = this.channels.get(channelId);
+
+      channel.isNew = false;
+
+      channel.lastMessage = _.get(message, 'body', '');
 
       channel.messages = channel.messages.set(id, true);
 
@@ -75,11 +93,11 @@ export default class Store{
     this.update();
   }
   
-  getMessages(){
+  getMessages() {
     return this.messages.valueSeq();
   }
 
-  getMessagesFromChannel(channel){
+  getMessagesFromChannel(channel) {
 
     let messages = [];
 
@@ -93,20 +111,28 @@ export default class Store{
     return messages;
   }
 
-  getMembersFromChannel(channel){
-    let members = [];
+  getMembersFromChannel(channel) {
+
+    let members = new OrderedMap();
 
     if(channel){
-      channel.members.map((value, key) => {
-        const member = users.get(key);
 
-        members.push(member);
+      channel.members.map((value, key) => {
+
+        const user = users.get(key);
+
+        const loggedUser = this.getCurrentUser();
+
+        if(_.get(loggedUser, '_id') !== _.get(user, '_id')) {
+
+          members = members.set(key, user);
+        }       
       });
     }
-    return members;
+    return members.valueSeq();
   }
 
-  addChannel(index, channel = {}){
+  addChannel(index, channel = {}) {
     this.channels = this.channels.set(`${index}`, channel);
 
     this.update();
