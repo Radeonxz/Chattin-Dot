@@ -22,7 +22,7 @@ body {
   flex-direction: column;
 }
 .app-messenger .header {
-  height: 10%;
+  height: 6rem;
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -77,6 +77,9 @@ body {
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 .app-messenger .header .content {
   width: 66%;
@@ -163,8 +166,7 @@ body {
   line-height: 2rem;
 }
 .messages .message .msg-body .msg-text {
-  background: #2c3e50;
-  color: #fff;
+  background: rgba(0, 0, 0, 0.05);
   font-size: 0.9rem;
   padding: 0.7rem;
   border-radius: 0.7rem;
@@ -185,7 +187,7 @@ body {
   cursor: pointer;
   display: flex;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  padding: 0.5rem 0.3rem;
+  padding: 0.5rem;
 }
 .channels .channel .user-img {
   width: 2.5rem;
@@ -203,10 +205,12 @@ body {
 .channels .channel .channel-info h2 {
   font-size: 0.9rem;
   font-weight: 600;
+  white-space: nowrap;
   overflow: hidden;
 }
 .channels .channel .channel-info p {
   font-size: 0.7rem;
+  white-space: nowrap;
   overflow: hidden;
 }
 .channels .channel.active {
@@ -243,6 +247,17 @@ body {
   display: flex;
   flex-direction: row;
   position: relative;
+}
+.toolbar span {
+  line-height: 1rem;
+  height: 1.8rem;
+  background: #2ecc71;
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  margin: 1.3rem 0.3rem 0 0.2rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.3rem;
 }
 .toolbar label {
   font-size: 1rem;
@@ -290,6 +305,65 @@ body {
 }
 .toolbar .search-user .user-list .user:hover {
   background: rgba(0, 0, 0, 0.02);
+}
+
+.user-bar {
+  position: relative;
+}
+.user-bar button.login-btn {
+  height: 6rem;
+  padding: 1rem 0;
+  border: 0 none;
+  background: none;
+  color: #2ecc71;
+  font-weight: 600;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+.user-bar .user-form {
+  position: absolute;
+  top: 6rem;
+  right: 0;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-top: 0 none;
+  padding: 3rem;
+}
+.user-bar .user-form .form-item label {
+  height: 2rem;
+  min-width: 8rem;
+  text-align: right;
+  margin-right: 1rem;
+}
+.user-bar .user-form .form-item input[type=email], .user-bar .user-form .form-item input[type=password], .user-bar .user-form .form-item input[type=text] {
+  height: 2rem;
+  line-height: 2rem;
+}
+.user-bar .user-form .form-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.form-item {
+  display: flex;
+  margin-bottom: 1rem;
+}
+.form-item label {
+  font-weight: 600;
+}
+.form-item input[type=email], .form-item input[type=password], .form-item input[type=text] {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 0.5rem 2rem;
+}
+
+.form-actions button {
+  border: 0 none;
+  padding: 0.7rem 2.5rem;
+  text-align: center;
+}
+.form-actions button.primary {
+  background: #2ecc71;
+  color: #fff;
 }
 
 /*# sourceMappingURL=app.css.map */

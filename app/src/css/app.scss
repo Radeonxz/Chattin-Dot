@@ -86,6 +86,9 @@ body{
                         width: 3rem;
                         height: 3rem;
                         border-radius: 50%;
+                        position: relative;
+                        top: 50%;
+                        transform: translateY(-50%);
                     }
                 }
             }
@@ -181,8 +184,7 @@ body{
                 line-height: 2rem;
             }
             .msg-text{
-                background: $body-color;
-                color: #fff;
+                background: rgba(0, 0, 0, 0.05);
                 font-size: 0.9rem;
                 padding: 0.7rem;
                 border-radius: 0.7rem;
@@ -207,7 +209,7 @@ body{
         cursor: pointer;
         display: flex;
         border-bottom: 1px solid $border-color;
-        padding: 0.5rem 0.3rem;
+        padding: 0.5rem;
         .user-img{
             width: 2.5rem;
             img{
@@ -223,10 +225,12 @@ body{
             h2{
                 font-size: 0.9rem;
                 font-weight: 600;
+                white-space: nowrap;
                 overflow: hidden;
             }
             p{
                 font-size: 0.7rem;
+                white-space: nowrap;
                 overflow: hidden;
             }
         }
@@ -273,6 +277,17 @@ body{
     display: flex;
     flex-direction: row;
     position: relative;
+    span{
+        line-height: 1rem;
+        height: 1.8rem;
+        background: $primary-color;
+        color: #fff;
+        cursor: pointer;
+        display: block;
+        margin: 1.3rem 0.3rem 0 0.2rem;
+        padding: 0.4rem 0.6rem;
+        border-radius: 0.3rem;
+    }
     label{
         font-size: 1rem;
         line-height: $header-line-height;
@@ -320,6 +335,69 @@ body{
                     background: rgba(0, 0, 0, 0.02);
                 }
             }
+        }
+    }
+}
+
+.user-bar{
+    position: relative;
+    button.login-btn{
+        height: $header-height;
+        padding: 1rem 0;
+        border: 0 none;
+        background: none;
+        color: $primary-color;
+        font-weight: 600;
+        font-size: 1.3rem;
+        cursor: pointer;
+    }
+    .user-form{
+        position: absolute;
+        top: $header-height;
+        right: 0;
+        border: 1px solid $border-color;
+        border-top: 0 none;
+        padding: 3rem;
+        .form-item{
+            label{
+                height: 2rem;
+                min-width: 8rem;
+                text-align: right;
+                margin-right: 1rem;
+            }
+            input[type='email'], input[type='password'], input[type='text']{
+                height: 2rem;
+                line-height: 2rem;
+            }
+        }
+        .form-actions{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+        }
+    }
+}
+
+.form-item{
+    display: flex;
+    margin-bottom: 1rem;
+    label{
+        font-weight: 600;
+    }
+    input[type='email'], input[type='password'], input[type='text']{
+        border: 1px solid $border-color;
+        padding: 0.5rem 2rem;
+    }
+}
+
+.form-actions{
+    button{
+        border: 0 none;
+        padding: 0.7rem 2.5rem;
+        text-align: center;
+        &.primary{
+            background: $primary-color;
+            color: #fff;
         }
     }
 }
