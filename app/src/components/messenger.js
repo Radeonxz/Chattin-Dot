@@ -10,6 +10,7 @@ import avatar from '../images/avatar.jpg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import SearchUser from './search-user'
+import Userbar from './user-bar'
 
 export default class Messenger extends Component {
   constructor(props) {
@@ -30,9 +31,12 @@ export default class Messenger extends Component {
     this.renderChannelTitle = this.renderChannelTitle.bind(this);
   }
 
-  renderChannelTitle(channel = {}) {
+  renderChannelTitle(channel = null) {
+    if(!channel) {
+      return null;
+    }
     const {store} = this.props;
-    const activeChannel = store.getActiveChannel();
+    // const activeChannel = store.getActiveChannel();
     const members = store.getMembersFromChannel(channel);
     const names = [];
 
@@ -154,14 +158,18 @@ export default class Messenger extends Component {
               <button>New message</button>
             </div>*/}
           </div>
+
           <div className = 'content'>
             {_.get(activeChannel, 'isNew') ? <div className = 'toolbar'>
               <label>To:</label>
               {
                 members.map((user, key) => {
-                  return <span key={key}>{_.get(user, 'name')}</span>
+                  return <span onClick={() => {
+                    store.removeMemberFromChannel(activeChannel, user);
+                  }} key={key}>{_.get(user, 'name')}</span>
                 })
               }
+
               <input placeholder='Type name...' onChange = {(event) => {
                 const searchUserText = _.get(event, 'target.value');
                 this.setState({
@@ -178,21 +186,18 @@ export default class Messenger extends Component {
                 }, () => {
                   const channelId = _.get(activeChannel, '_id');
                   const userId = _.get(user, '_id');
-                  
                   store.addUserToChannel(channelId, userId);
                 });
               }}
               search = {this.state.searchUser} store = {store} /> : null}
-            </div> : <h2>{_.get(activeChannel, 'title', '')}</h2> }
+            </div> : this.renderChannelTitle(activeChannel) }
           </div>
+
           <div className = 'right'>
-            <div className = 'user-bar'>
-              <div className = 'profile-name'><p>Radeon Xz</p></div>
-              {/*<div className = 'profile-image'><img src = 'https://randomuser.me/api/portraits/lego/2.jpg' alt = '' /></div>*/}
-              <div className = 'profile-image'><img src = {avatar} alt = '' /></div>
-            </div>
+            <Userbar store={store} />
           </div>
         </div>
+
         <div className = 'main'>
           <div className = 'sidebar-left'>
             <div className = 'channels'>
@@ -213,6 +218,7 @@ export default class Messenger extends Component {
               })}
             </div>
           </div>
+
           <div className = 'content'>
             <div ref = {(ref) => this.messagesRef = ref} className = 'messages'>
               {messages.map((message, index) => {
@@ -248,6 +254,7 @@ export default class Messenger extends Component {
               </div>
             </div> : null}
           </div>
+
           <div className = 'sidebar-right'>
             { members.size > 0 ? <div>
               <h2 className = 'title'>Members</h2>

@@ -15,12 +15,25 @@ export default class Store {
     this.activeChannelId = null;
     
     // Current logged in user
-    this.user = {
-      _id: '1',
-      name: 'Xuan Zhao VeryLong',
-      avatar: 'https://api.adorable.io/avatars/100/abott@alex.png',
-      created: new Date(),
+    // this.user = {
+    //   _id: '1',
+    //   name: 'Xuan Zhao VeryLong',
+    //   avatar: 'https://api.adorable.io/avatars/100/abott@alex.png',
+    //   created: new Date(),
+    // }
+    this.user = null;
+  }
+
+  removeMemberFromChannel(channel = null, user = null) {
+    if(!channel || !user) {
+      return;
     }
+
+    const userId = _.get(user, '_id');
+    const channelId = _.get(channel, '_id');
+    channel.members = channel.members.remove(userId);
+    this.channels = this.channels.set(channelId, channel);
+    this.update();
   }
 
   addUserToChannel(channelId, userId) {
@@ -89,30 +102,44 @@ export default class Store {
   }
 
   getMessagesFromChannel(channel) {
-    let messages = [];
+    let messages = new OrderedMap();
 
     if(channel){
-      channel.messages.map((value, key) => {
+      // channel.messages.map((value, key) => {
+      //   const message = this.messages.get(key);
+      //   messages.push(message);
+      // });
+
+      channel.messages.forEach((value, key) => {
         const message = this.messages.get(key);
-        messages.push(message);
-      });
+        messages = messages.set(key, message);
+      })
     }
 
-    return messages;
+    return messages.valueSeq();
   }
 
   getMembersFromChannel(channel) {
     let members = new OrderedMap();
 
     if(channel){
-      channel.members.map((value, key) => {
+      // channel.members.map((value, key) => {
+      //   const user = users.get(key);
+      //   const loggedUser = this.getCurrentUser();
+
+      //   if(_.get(loggedUser, '_id') !== _.get(user, '_id')) {
+      //     members = members.set(key, user);
+      //   }       
+      // });
+
+      channel.members.forEach((value, key) => {
         const user = users.get(key);
         const loggedUser = this.getCurrentUser();
 
         if(_.get(loggedUser, '_id') !== _.get(user, '_id')) {
           members = members.set(key, user);
-        }       
-      });
+        }
+      })
     }
 
     return members.valueSeq();
