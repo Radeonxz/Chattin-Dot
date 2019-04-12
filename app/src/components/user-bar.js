@@ -19,7 +19,7 @@ export default class UserBar extends Component {
         <div className = 'profile-name'><p>{_.get(me, 'name')}</p></div>
         {/*<div className = 'profile-image'><img src = 'https://randomuser.me/api/portraits/lego/2.jpg' alt = '' /></div>*/}
         <div className = 'profile-image'><img src = {profilePicture ? profilePicture : avatar} alt = '' /></div>
-        <UserForm />
+        <UserForm store={store} />
       </div>
     );
   }
