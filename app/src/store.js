@@ -2,9 +2,9 @@ import {OrderedMap} from 'immutable'
 import _ from 'lodash'
 
 const users = OrderedMap({
-  '1': {_id: '1', name: 'Xuan Zhao VeryLong', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@alex.png'},
-  '2': {_id: '2', name: 'Zhao111111111111111111111', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@bob.png'},
-  '3': {_id: '3', name: 'Bob2222222222222222222222', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@john.png'},
+  '1': {_id: '1', email: 'xuan@123.com', name: 'Xuan Zhao VeryLong', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@alex.png'},
+  '2': {_id: '2', email: 'zhao@123.com', name: 'Zhao111111111111111111111', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@bob.png'},
+  '3': {_id: '3', email: 'bob@123.com', name: 'Bob2222222222222222222222', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@john.png'},
 });
 
 export default class Store {
@@ -25,7 +25,14 @@ export default class Store {
   }
 
   login(email, password) {
-    console.log(email, password);
+    const userEmail = _.toLower(email);
+
+    return new Promise((resolve, reject) => {
+      const user = users.find((user) => user.email === userEmail);
+      return user ? resolve(user) : reject('User not found');
+    });
+
+    
   }
 
   removeMemberFromChannel(channel = null, user = null) {
