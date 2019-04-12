@@ -24,6 +24,10 @@ export default class Store {
     this.user = null;
   }
 
+  login(email, password) {
+    console.log(email, password);
+  }
+
   removeMemberFromChannel(channel = null, user = null) {
     if(!channel || !user) {
       return;

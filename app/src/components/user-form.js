@@ -17,9 +17,12 @@ export default class UserForm extends Component {
 
   onSubmit(event) {
     const { user } = this.state;
+    const { store } = this.props;
     event.prevenDefault();
 
-    console.log('form is submitted', user);
+    if(user.email && user.password) {
+      store.login(user.email, user.password);
+    }
   }
 
   onTextFieldChange(event) {
