@@ -15,12 +15,30 @@ export default class UserForm extends Component {
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onTextFieldChange = this.onTextFieldChange.bind(this);
+    this.onClickOutside = this.onClickOutside.bind(this);
+  }
+
+  onClickOutside(event) {
+    if(this.ref && !this.ref.contains(event.target)) {
+      if(this.props.onClose) {
+        this.props.onClose();
+      }
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener('mousedown', this.onClickOutside);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('mousedown', this.onClickOutside);
   }
 
   onSubmit(event) {
     const { user } = this.state;
     const { store } = this.props;
     event.preventDefault();
+
     this.setState({message: null}, () => {
       store.login(user.email, user.password)
       .then((user) => {
@@ -56,7 +74,7 @@ export default class UserForm extends Component {
   render() {
     const { user, message } = this.state;
     return (
-      <div className='user-form'>
+      <div className='user-form' ref={(ref) => this.ref = ref}>
         <form onSubmit={this.onSubmit} method='post'>
           {message ? <p className={classNames('app-message', _.get(message, 'type'))}>{_.get(message, 'body')}</p> : null}
           <div className='form-item'>

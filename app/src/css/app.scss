@@ -401,3 +401,16 @@ body{
         }
     }
 }
+
+.app-message{
+    font-size: 1.3rem;
+    text-align: center;
+    border: 1px solid $primary-color;
+    border-radius: 0.3rem;
+    margin: 1.6rem 0;
+    &.error{
+        background: $danger-color;
+        border-color: $danger-color;
+        color: #fff;
+    }
+}
