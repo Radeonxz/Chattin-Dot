@@ -7,6 +7,9 @@ import avatar from '../images/avatar.jpg'
 export default class UserBar extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      showUseForm: false,
+    }
   }
 
   render() {
@@ -15,11 +18,20 @@ export default class UserBar extends Component {
     const profilePicture = _.get(me, 'avatar');
     return (
       <div className = 'user-bar'>
-        {!me ? <button type='button' className='login-btn'>Sign In</button> : null}
+        {!me ? <button onClick={() => {
+          this.setState({
+            showUseForm: true,
+          })
+        }} type='button' className='login-btn'>Sign In</button> : null}
         <div className = 'profile-name'><p>{_.get(me, 'name')}</p></div>
         {/*<div className = 'profile-image'><img src = 'https://randomuser.me/api/portraits/lego/2.jpg' alt = '' /></div>*/}
         <div className = 'profile-image'><img src = {profilePicture ? profilePicture : avatar} alt = '' /></div>
-        <UserForm store={store} />
+        
+        {!me && this.state.showUseForm ? <UserForm onClose={() => {
+          this.setState({
+            showUseForm: false,
+          })
+        }} store={store} /> : null}
       </div>
     );
   }

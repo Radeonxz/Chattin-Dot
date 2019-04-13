@@ -366,4 +366,17 @@ body {
   color: #fff;
 }
 
+.app-message {
+  font-size: 1.3rem;
+  text-align: center;
+  border: 1px solid #2ecc71;
+  border-radius: 0.3rem;
+  margin: 1.6rem 0;
+}
+.app-message.error {
+  background: #e74c3c;
+  border-color: #e74c3c;
+  color: #fff;
+}
+
 /*# sourceMappingURL=app.css.map */
