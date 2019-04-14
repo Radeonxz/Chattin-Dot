@@ -80,6 +80,7 @@ body {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+  cursor: pointer;
 }
 .app-messenger .header .content {
   width: 60%;
@@ -343,6 +344,41 @@ body {
   flex-direction: row;
   justify-content: flex-end;
 }
+.user-bar .user-menu {
+  min-width: 8rem;
+  position: absolute;
+  right: 0;
+  top: 6rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-top: none;
+}
+.user-bar .user-menu ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.user-bar .user-menu ul li {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 1rem 2rem;
+}
+.user-bar .user-menu ul li button {
+  background: none;
+  border: 0 none;
+  display: block;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+.user-bar .user-menu ul li:hover {
+  background: rgba(0, 0, 0, 0.09);
+}
+.user-bar .user-menu h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  display: block;
+  text-align: center;
+}
 
 .form-item {
   display: flex;
@@ -371,7 +407,7 @@ body {
   text-align: center;
   border: 1px solid #2ecc71;
   border-radius: 0.3rem;
-  margin: 1.6rem 0;
+  margin: 0 0 1.6rem 0;
 }
 .app-message.error {
   background: #e74c3c;

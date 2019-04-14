@@ -21,14 +21,46 @@ export default class Store {
     //   avatar: 'https://api.adorable.io/avatars/100/abott@alex.png',
     //   created: new Date(),
     // }
+    this.user = this.getUserFromLocalStorage();
+  }
+
+  getUserFromLocalStorage() {
+    let user = null;
+    const data = localStorage.getItem('me');
+    
+    try {
+      user = JSON.parse(data);
+    } catch(err) {
+
+    };
+    return user;
+  }
+
+  setCurrentUser(user) {
+    this.user = user;
+
+    if(user) {
+      localStorage.setItem('me', JSON.stringify(user));
+    }
+    this.update();
+  }
+
+  signOut() {
     this.user = null;
+    localStorage.removeItem('me');
+    this.update();
   }
 
   login(email, password) {
     const userEmail = _.toLower(email);
+    const _this = this;
 
     return new Promise((resolve, reject) => {
       const user = users.find((user) => user.email === userEmail);
+      
+      if(user) {
+        _this.setCurrentUser(user);
+      }
       return user ? resolve(user) : reject('User not found');
     });
 

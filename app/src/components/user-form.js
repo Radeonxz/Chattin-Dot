@@ -42,7 +42,9 @@ export default class UserForm extends Component {
     this.setState({message: null}, () => {
       store.login(user.email, user.password)
       .then((user) => {
-        console.log('callback', user);
+        if(this.props.onClose) {
+          this.props.onClose();
+        }
         this.setState({
           message: null,
         });

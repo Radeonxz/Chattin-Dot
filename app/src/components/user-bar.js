@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import UserForm from './user-form'
+import UserMenu from './user-menu'
 
 import avatar from '../images/avatar.jpg'
 
@@ -8,7 +9,8 @@ export default class UserBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showUseForm: false,
+      showUserForm: false,
+      showUserMenu: false,
     }
   }
 
@@ -20,18 +22,30 @@ export default class UserBar extends Component {
       <div className = 'user-bar'>
         {!me ? <button onClick={() => {
           this.setState({
-            showUseForm: true,
+            showUserForm: true,
           })
         }} type='button' className='login-btn'>Sign In</button> : null}
+        
         <div className = 'profile-name'><p>{_.get(me, 'name')}</p></div>
         {/*<div className = 'profile-image'><img src = 'https://randomuser.me/api/portraits/lego/2.jpg' alt = '' /></div>*/}
-        <div className = 'profile-image'><img src = {profilePicture ? profilePicture : avatar} alt = '' /></div>
         
-        {!me && this.state.showUseForm ? <UserForm onClose={() => {
+        <div className = 'profile-image' onClick={() => {
           this.setState({
-            showUseForm: false,
+            showUserMenu: true,
+          })
+        }}><img src = {profilePicture ? profilePicture : avatar} alt = '' /></div>
+        
+        {!me && this.state.showUserForm ? <UserForm onClose={() => {
+          this.setState({
+            showUserForm: false,
           })
         }} store={store} /> : null}
+
+        {this.state.showUserMenu ? <UserMenu onClose={() => {
+            this.setState({
+              showUserMenu: false,
+            })
+          }} store={store}/> : null}
       </div>
     );
   }
