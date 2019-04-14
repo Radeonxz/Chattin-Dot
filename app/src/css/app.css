@@ -28,7 +28,7 @@ body {
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 .app-messenger .header .left {
-  width: 17%;
+  width: 18%;
   position: relative;
 }
 .app-messenger .header .left .left-action {
@@ -56,7 +56,7 @@ body {
   cursor: pointer;
 }
 .app-messenger .header .right {
-  width: 17%;
+  width: 22%;
 }
 .app-messenger .header .right .user-bar {
   display: flex;
@@ -82,7 +82,7 @@ body {
   transform: translateY(-50%);
 }
 .app-messenger .header .content {
-  width: 66%;
+  width: 60%;
 }
 .app-messenger .header .content h2 {
   text-align: center;
@@ -96,11 +96,11 @@ body {
   overflow: hidden;
 }
 .app-messenger .main .sidebar-left {
-  width: 17%;
+  width: 18%;
   border-right: 1px solid rgba(0, 0, 0, 0.05);
 }
 .app-messenger .main .sidebar-right {
-  width: 17%;
+  width: 22%;
   border-left: 1px solid rgba(0, 0, 0, 0.05);
 }
 .app-messenger .main .sidebar-right .title {
@@ -110,7 +110,7 @@ body {
 }
 .app-messenger .main .content {
   overflow: hidden;
-  width: 66%;
+  width: 60%;
   display: flex;
   flex-direction: column;
 }
@@ -326,7 +326,7 @@ body {
   right: 0;
   border: 1px solid rgba(0, 0, 0, 0.05);
   border-top: 0 none;
-  padding: 3rem;
+  padding: 2rem;
 }
 .user-bar .user-form .form-item label {
   height: 2rem;
@@ -353,7 +353,7 @@ body {
 }
 .form-item input[type=email], .form-item input[type=password], .form-item input[type=text] {
   border: 1px solid rgba(0, 0, 0, 0.05);
-  padding: 0.5rem 2rem;
+  padding: 0.5rem 1rem;
 }
 
 .form-actions button {

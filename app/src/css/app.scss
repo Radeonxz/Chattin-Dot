@@ -357,7 +357,7 @@ body{
         right: 0;
         border: 1px solid $border-color;
         border-top: 0 none;
-        padding: 3rem;
+        padding: 2rem;
         .form-item{
             label{
                 height: 2rem;
@@ -386,7 +386,7 @@ body{
     }
     input[type='email'], input[type='password'], input[type='text']{
         border: 1px solid $border-color;
-        padding: 0.5rem 2rem;
+        padding: 0.5rem 1rem;
     }
 }
 
