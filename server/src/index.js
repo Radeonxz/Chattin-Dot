@@ -4,15 +4,21 @@ import cors from 'cors';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import WebSocketServer, {Server} from 'ws';
+import AppRouter from './app-router';
+import Model from './models';
+import Database from './database';
+import dotenv from 'dotenv'
 
-const PORT = 3000;
+const PORT = 3001;
 const app = express();
 app.server = http.createServer(app);
 
+// Setup env
+dotenv.config()
 
 app.use(morgan('dev'));
 
-
+// Setup CORS
 app.use(cors({
   exposedHeaders: '*'
 }));
@@ -21,10 +27,31 @@ app.use(bodyParser.json({
   limit: '50mb'
 }));
 
+// Connect to MongoDB
+const mongodbURI = process.env.MONGODB_URI;
+console.log('mongodbURI', mongodbURI);
+new Database().connect(mongodbURI, {
+  useNewUrlParser: true
+})
+.then((db) => {
+  console.log('Successfully connected to MongoDB');
+  app.db = db;
+})
+.catch((err) => {
+  throw(err);
+});
+
+// import models
+app.models = new Model(app);
+
+// Import app-router
+app.routers = new AppRouter(app);
+
 app.wss = new Server({
   server: app.server
 });
 
+/*
 let clients = [];
 
 app.wss.on('connection', (connection) => {
@@ -56,33 +83,10 @@ app.wss.on('connection', (connection) => {
       clients = clients.filter((client) => client.userId !== userId);
   });
 });
-
-app.get('/', (req, res) => {
-    res.json('Hello World');
-});
-
-app.get('/api/connections', (req, res) => {
-    return res.json({
-        people: clients
-    });
-});
-
-
-setInterval(() => {
-    console.log(`There ${clients.length} people in the connection`);
-
-    if(clients.length > 0){
-        clients.forEach((client) => {
-            console.log('cliend ID:', client.userId);
-
-            const msg = `Hi, ID:${client.userId}, you received new message`
-            client.ws.send(msg);
-        });
-    }
-}, 5000);
+*/
 
 app.server.listen(process.env.PORT || PORT, () => {
-        console.log(`App is running on port ${app.server.address().port}`);
+  console.log(`App is running on port ${app.server.address().port}`);
 });
 
 export default app;
