@@ -46,25 +46,28 @@ export default class User {
       const err = _.join(errors, ', ');
       return callback(err, null);
     }
-    return callback(null, user);
+
+    // Check if email is existing in db
+    const email = _.toLower(_.trim(_.get(user, 'email', '')));
+    this.app.db.collection('users').findOne({email: email}, (err, result) => {
+      if(err || result) {
+        return callback({message: 'Email is already exist'}, null);
+      }
+      return callback(null, user);
+    });
   }
 
   create(user) {
     const db = this.app.db;
-    // console.log('db shoule be', db);
-    console.log('user is', user);
+
     return new Promise((resolve, reject) => {
       this.beforeSave(user, (err, user) => {
         console.log('After validation:', err, user);
         if(err) {
-          // return reject(err);
-          return reject({message: 'Error when saving the user'});
+          return reject(err);
         }
-        // return resolve(db);
-        console.log('herererere');
-        console.log('users hererere', user);
+
         db.collection('users').insertOne(user, (err, info) => {
-          console.log('user shoule be', user);
           if(err) {
             reject({message: 'Error when saving the user'});
           } 
