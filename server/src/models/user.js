@@ -51,20 +51,15 @@ export default class User {
 
   create(user) {
     const db = this.app.db;
-    // console.log('db shoule be', db);
-    console.log('user is', user);
+
     return new Promise((resolve, reject) => {
       this.beforeSave(user, (err, user) => {
         console.log('After validation:', err, user);
         if(err) {
-          // return reject(err);
-          return reject({message: 'Error when saving the user'});
+          return reject(err);
         }
-        // return resolve(db);
-        console.log('herererere');
-        console.log('users hererere', user);
+
         db.collection('users').insertOne(user, (err, info) => {
-          console.log('user shoule be', user);
           if(err) {
             reject({message: 'Error when saving the user'});
           } 
