@@ -46,7 +46,15 @@ export default class User {
       const err = _.join(errors, ', ');
       return callback(err, null);
     }
-    return callback(null, user);
+
+    // Check if email is existing in db
+    const email = _.toLower(_.trim(_.get(user, 'email', '')));
+    this.app.db.collection('users').findOne({email: email}, (err, result) => {
+      if(err || result) {
+        return callback({message: 'Email is already exist'}, null);
+      }
+      return callback(null, user);
+    });
   }
 
   create(user) {
