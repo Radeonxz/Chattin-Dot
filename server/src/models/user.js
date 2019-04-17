@@ -1,9 +1,34 @@
-import _ from 'lodash';
-import { isEmail } from '../helper';
+import _ from 'lodash'
+import { isEmail } from '../helper'
+import bcrypt from 'bcrypt'
+import { ObjectId } from 'mongodb'
+
+const saltRound = 10;
 
 export default class User {
   constructor(app) {
     this.app = app;
+  }
+
+  load(id) {
+    return new Promise((resolve, reject) => {
+      this.findUserById(id, (err, user) => {
+        return err ? reject(err) : resolve(user);
+      });
+    });
+  }
+
+  findUserById(id, callback = () => {}) {
+    if(!id) {
+      return callback({message: 'Non valid user id'}, null);
+    }
+    const userId = new ObjectId(id);
+    this.app.db.collection('users').findOne({_id: userId}, (err, result) => {
+      if(err || !result) {
+        return callback({message: 'User not found'});
+      }
+      return callback(null, result);
+    });
   }
 
   beforeSave(user, callback = () => {}) {
@@ -53,7 +78,18 @@ export default class User {
       if(err || result) {
         return callback({message: 'Email is already exist'}, null);
       }
-      return callback(null, user);
+
+      // return success callback
+      const password = _.get(user, 'password');
+      const hashPassword = bcrypt.hashSync(password, saltRound);
+      
+      const userFormatted = {
+        name: `${_.trim(_.get(user, 'name'))}`,
+        email: email,
+        password: hashPassword,
+        created: new Date(),
+      };
+      return callback(null, userFormatted);
     });
   }
 

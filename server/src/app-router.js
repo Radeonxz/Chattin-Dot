@@ -1,4 +1,5 @@
-import moment from 'moment';
+import _ from 'lodash'
+import moment from 'moment'
 
 export const START_TIME = new Date();
 
@@ -30,11 +31,29 @@ export default class AppRouter {
     app.post('/api/users', (req, res, next) => {
       const body = req.body;
       app.models.user.create(body).then((user) => {
+        _.unset(user, 'password');
         return res.status(200).json(user);
       })
       .catch(err => {
-        return res.status(503).json(err);
+        return res.status(400).json(err);
       })
+    });
+
+    /**
+    * @endpoint: /api/users/:id
+    * @method: GET
+    **/
+    app.get('/api/users/:id', (req, res, next) => {
+      const userId = _.get(req, 'params.id');
+
+      app.models.user.load(userId).then((user) => {
+        _.unset(user, 'password');
+        return res.status(200).json(user);
+      }).catch(err => {
+        return res.status(404).json({
+          error: err,
+        });
+      });
     });
   }
 }
