@@ -2,23 +2,83 @@ import _ from 'lodash'
 import { isEmail } from '../helper'
 import bcrypt from 'bcrypt'
 import { ObjectId } from 'mongodb'
+import { OrderedMap } from 'immutable'
 
 const saltRound = 10;
 
 export default class User {
   constructor(app) {
     this.app = app;
+    this.users = new OrderedMap();
+  }
+
+  login(user) {
+    const email = _.get(user, 'email', '');
+    const password = _.get(user, 'password', '');
+
+    return new Promise((resolve, reject) => {
+      if(!password || !email || !isEmail(email)) {
+        return reject({message: 'An error occured when login'});
+      }
+
+      // find user by email in db
+      this.findUserByEmail(email, (err, result) => {
+        if(err) {
+          return reject({message: 'Login Error'});
+        }
+
+        // check user password
+        const hashPassword = _.get(result, 'password');
+        const isMatch = bcrypt.compareSync(password, hashPassword);
+        console.log(isMatch);
+        if(!isMatch) {
+          return reject({message: 'Login Error'});
+        }
+
+        // user login successfully and create new token
+        const userId = result._id;
+        this.app.models.token.create(userId).then((token) => {
+          token.user = result;
+          return resolve(token);
+        }).catch(err => {
+          return reject({message: 'Login Error'});
+        })
+        
+      })
+    })
+  }
+
+  findUserByEmail(email, callback = () => {}) {
+    this.app.db.collection('users').findOne({email: email}, (err, result) => {
+      if(err || !result) {
+        return callback({message: 'User not found'})
+      }
+
+      return callback(null, result);
+    });
   }
 
   load(id) {
     return new Promise((resolve, reject) => {
+
+      // Find in user in cache
+      const userInCache = this.users.get(id);
+      if(userInCache) {
+        return resolve(userInCache);
+      }
+
+      // If not found in cache
       this.findUserById(id, (err, user) => {
+        if(!err && user) {
+          this.users = this.users.set(id, user);
+        }
         return err ? reject(err) : resolve(user);
       });
     });
   }
 
   findUserById(id, callback = () => {}) {
+    console.log('first query in db');
     if(!id) {
       return callback({message: 'Non valid user id'}, null);
     }
@@ -106,7 +166,10 @@ export default class User {
         db.collection('users').insertOne(user, (err, info) => {
           if(err) {
             reject({message: 'Error when saving the user'});
-          } 
+          }
+          
+          const userId = _.get(user, '_id').toString();
+          this.users = this.users.set(userId, user);
           return resolve(user);
         });
       });
