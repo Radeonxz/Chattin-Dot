@@ -55,5 +55,26 @@ export default class AppRouter {
         });
       });
     });
+
+    /**
+    * @endpoint: /api/users/login
+    * @method: POST
+    **/
+
+    app.post('/api/users/login', (req, res, next) => {
+      const body = _.get(req, 'body');
+      app.models.user.login(body).then((token) => {
+        console.log('successfully logged in', token);
+        _.unset(token, 'user.password');
+        return res.status(200).json(token);
+      }).catch(err => {
+        return res.status(401).json({
+          error: err
+        })
+      })
+    });
+
+
+
   }
 }
