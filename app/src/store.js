@@ -1,15 +1,17 @@
 import {OrderedMap} from 'immutable'
 import _ from 'lodash'
+import Service from './service';
 
-const users = OrderedMap({
-  '1': {_id: '1', email: 'xuan@123.com', name: 'Xuan Zhao VeryLong', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@alex.png'},
-  '2': {_id: '2', email: 'zhao@123.com', name: 'Zhao111111111111111111111', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@bob.png'},
-  '3': {_id: '3', email: 'bob@123.com', name: 'Bob2222222222222222222222', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@john.png'},
-});
+// const users = OrderedMap({
+//   '1': {_id: '1', email: 'xuan@123.com', name: 'Xuan Zhao VeryLong', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@alex.png'},
+//   '2': {_id: '2', email: 'zhao@123.com', name: 'Zhao111111111111111111111', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@bob.png'},
+//   '3': {_id: '3', email: 'bob@123.com', name: 'Bob2222222222222222222222', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@john.png'},
+// });
 
 export default class Store {
   constructor(appComponent) {
     this.app = appComponent;
+    this.service = new Service();
     this.messages = new OrderedMap();
     this.channels = new OrderedMap();
     this.activeChannelId = null;
@@ -21,7 +23,35 @@ export default class Store {
     //   avatar: 'https://api.adorable.io/avatars/100/abott@alex.png',
     //   created: new Date(),
     // }
+    this.token = this.getTokenFromLocalStorage();
     this.user = this.getUserFromLocalStorage();
+    this.users = new OrderedMap();
+    this.search = {
+      users: new OrderedMap(),
+    }
+  }
+
+  setUserToken(accessToken) {
+    if(!accessToken) {
+      this.localStorage.removeItem('token');
+      this.token = null;
+      return;
+    }
+    this.token = accessToken;
+    localStorage.setItem('token', JSON.stringify(accessToken));
+  }
+
+  getTokenFromLocalStorage() {
+    let token = null;
+    const data = localStorage.getItem('token');
+    if(data) {
+      try {
+        token = JSON.parse(data);
+      } catch(err) {
+        console.log(err);
+      }
+    }
+    return token;
   }
 
   getUserFromLocalStorage() {
@@ -31,38 +61,79 @@ export default class Store {
     try {
       user = JSON.parse(data);
     } catch(err) {
+      console.log(err);
+    }
 
-    };
+    if(user) {
+      // api call to backend to verify the current user
+      
+    }
     return user;
   }
 
   setCurrentUser(user) {
+
+    // set temporary user avatar image url
+    user.avatar = `https://api.adorable.io/avatars/100/${user._id}.png`
     this.user = user;
 
     if(user) {
       localStorage.setItem('me', JSON.stringify(user));
+
+      // save user to users collections in local storage
+      const userId = `${user._id}`;
+      this.users = this.users.set(userId, user);
     }
     this.update();
   }
 
   signOut() {
+    const userId = `${_.get(this.user, '_id', null)}`;
     this.user = null;
     localStorage.removeItem('me');
+
+    if(userId) {
+      this.users = this.users.remove();
+    }
     this.update();
   }
 
-  login(email, password) {
+  login(email = null, password = null) {
     const userEmail = _.toLower(email);
-    const _this = this;
+    // const _this = this;
+
+    const user = {
+      email: userEmail,
+      password: password,
+    }
+    console.log('trying to login', user);
 
     return new Promise((resolve, reject) => {
-      const user = users.find((user) => user.email === userEmail);
-      
-      if(user) {
-        _this.setCurrentUser(user);
-      }
-      return user ? resolve(user) : reject('User not found');
+      // api call to backend to login user
+      this.service.post('api/users/login', user).then((response) => {
+        // successfully logged in
+        const accessToken = _.get(response, 'data');
+        console.log('got sth from server', accessToken);
+
+        const user = _.get(accessToken, 'user');
+        this.setCurrentUser(user);
+        this.setUserToken(accessToken);
+      }).catch((err) => {
+        // login error
+        console.log('got err from server', err);
+        const message = _.get(err, 'response.data.error.message', 'Login Error');
+        return reject(message);
+      });
     });
+
+    // return new Promise((resolve, reject) => {
+    //   const user = users.find((user) => user.email === userEmail);
+      
+    //   if(user) {
+    //     _this.setCurrentUser(user);
+    //   }
+    //   return user ? resolve(user) : reject('User not found');
+    // });
 
     
   }
@@ -90,16 +161,16 @@ export default class Store {
   }
 
   searchUsers(search = '') {
-    const keyword = _.toLower(search);
-    let searchItems = new OrderedMap();
-    const currentUser = this.getCurrentUser();
-    const currentUserId = _.get(currentUser, '_id');
+    //const keyword = _.toLower(search);
+    // let searchItems = new OrderedMap();
+    // const currentUser = this.getCurrentUser();
+    // const currentUserId = _.get(currentUser, '_id');
 
-    if(_.trim(search).length) {
-      searchItems = users.filter((user) => _.get(user, '_id') !== currentUserId && _.includes(_.toLower(_.get(user, 'name')), keyword));
-    }
+    // if(_.trim(search).length) {
+    //   searchItems = users.filter((user) => _.get(user, '_id') !== currentUserId && _.includes(_.toLower(_.get(user, 'name')), keyword));
+    // }
 
-    return searchItems.valueSeq();
+    return this.search.users.valueSeq();
   }
 
   onCreateNewChannel(channel = {}) {
@@ -176,7 +247,8 @@ export default class Store {
       // });
 
       channel.members.forEach((value, key) => {
-        const user = users.get(key);
+        const userId = `${key}`
+        const user = this.users.get(userId);
         const loggedUser = this.getCurrentUser();
 
         if(_.get(loggedUser, '_id') !== _.get(user, '_id')) {
