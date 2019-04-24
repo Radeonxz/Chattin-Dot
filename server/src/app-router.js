@@ -40,6 +40,27 @@ export default class AppRouter {
     });
 
     /**
+    * @endpoint: /api/users/me
+    * @method: GET
+    **/
+    app.get('/api/users/me', (req, res, next) => {
+      let tokenId = req.get('authorization');
+      if(!tokenId) {
+        // get token from query
+        tokenId = _.get(req, 'query.auth');
+      }
+
+      app.models.token.load(tokenId).then((accessToken) => {
+        return res.json(accessToken);
+      }).catch(err => {
+        return res.status(401).json({
+          error: err
+        })
+      });
+   });
+
+
+    /**
     * @endpoint: /api/users/:id
     * @method: GET
     **/
