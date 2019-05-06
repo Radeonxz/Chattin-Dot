@@ -12,6 +12,24 @@ export default class User {
     this.users = new OrderedMap();
   }
 
+  search(q='') {
+    return new Promise((resolve, reject) => {
+      const regex = new RegExp(q, 'i');
+      const query = {
+        $or: [
+          {name: {$regex: regex}},
+          {email: {$regex: regex}},
+        ],
+      };
+      this.app.db.collection('users').find(query, {_id: true, name: true, created: true}).toArray((err, results) => {
+        if(err || !results || !results.length) {
+          return reject({messae: 'User not Found'});
+        }
+        return resolve(results);
+      })
+    })
+  }
+
   login(user) {
     const email = _.get(user, 'email', '');
     const password = _.get(user, 'password', '');
@@ -59,6 +77,8 @@ export default class User {
   }
 
   load(id) {
+    id = `${id}`;
+    
     return new Promise((resolve, reject) => {
 
       // Find in user in cache

@@ -50,14 +50,29 @@ export default class AppRouter {
         tokenId = _.get(req, 'query.auth');
       }
 
-      app.models.token.load(tokenId).then((accessToken) => {
-        return res.json(accessToken);
+      app.models.token.loadTokenAndUser(tokenId).then((token) => {
+        return res.json(token);
       }).catch(err => {
         return res.status(401).json({
           error: err
         })
       });
    });
+
+    /**
+    * @endpoint: /api/users/search
+    * @method: POST
+    **/
+    app.post('/api/users/search', (req, res, next) => {
+      const keyword = _.get(req, 'body.search', '');
+      app.models.user.search(keyword).then((results) => {
+        return res.status(200).json(results);
+      }).catch((err) => {
+        return res.status(404).json({
+          error: 'Not Found',
+        });
+      });
+    });
 
 
     /**
