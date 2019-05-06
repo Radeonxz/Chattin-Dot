@@ -9,9 +9,33 @@ export default class Token {
     this.tokens = new OrderedMap();
   }
 
+  loadTokenAndUser(id) {
+    return new Promise((resolve, reject) => {
+      this.load(id).then((token) => {
+        const userId = `${token.userId}`;
+        
+        this.app.models.user.load(userId).then((user) => {
+          token.user = user;
+          return resolve(token);
+        }).catch((err) => {
+          return reject(err);
+        });
+      }).catch((err) => {
+        return reject(err);
+      });
+    })
+  }
+
   load(id = null) {
     id = `${id}`;
+
     return new Promise((resolve, reject) => {
+      // check token in cache, if not found in cache then query db
+      const tokenFromCache = this.tokens.get(id);
+      if(tokenFromCache) {
+        return resolve(tokenFromCache);
+      }
+
       this.findTokenById(id, (err, token) => {
         if(!err && token) {
           const tokenId = token._id.toString();

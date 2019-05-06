@@ -31,6 +31,34 @@ export default class Store {
     }
   }
 
+  loadUserAvatar(user) {
+    return `https://api.adorable.io/avatars/100/${user._id}.png`;
+  }
+
+  startSearchUsers(q = '') {
+    // query to db and get list of users
+    const data = {search: q}
+    this.search.users = this.search.users.clear();
+    this.service.post('api/users/search', data).then((response) => {
+      // searched results
+      const users = _.get(response, 'data', []);
+      _.each(users, (user) => {
+        // cache to this.users
+
+        // add user to this.search.users
+        user.avatar = this.loadUserAvatar(user);
+        const userId = `${user._id}`;
+        this.users = this.users.set(userId, user);
+        this.search.users = this.search.users.set(userId, user);
+      });
+
+      // update component
+      this.update();
+    }).catch((err) => {
+      console.log('searching error', err);
+    })
+  }
+
   setUserToken(accessToken) {
     if(!accessToken) {
       this.localStorage.removeItem('token');
@@ -42,6 +70,10 @@ export default class Store {
   }
 
   getTokenFromLocalStorage() {
+    if(this.token) {
+      return this.token;
+    }
+
     let token = null;
     const data = localStorage.getItem('token');
     if(data) {
@@ -66,7 +98,22 @@ export default class Store {
 
     if(user) {
       // api call to backend to verify the current user
-      
+      const token = this.getTokenFromLocalStorage();
+      const tokenId = _.get(token, '_id');
+      const options = {
+        headers: {
+          authorization: tokenId,
+        }
+      }
+      this.service.get('api/users/me', options).then((response) => {
+        // user is logged in with tokenId
+        const accessToken = response.data;
+        const user = _.get(accessToken, 'user');
+        this.setCurrentUser(user);
+        this.setUserToken(accessToken);
+      }).catch(err => {
+        this.signOut();
+      });
     }
     return user;
   }
@@ -74,7 +121,7 @@ export default class Store {
   setCurrentUser(user) {
 
     // set temporary user avatar image url
-    user.avatar = `https://api.adorable.io/avatars/100/${user._id}.png`
+    user.avatar = this.loadUserAvatar(user);
     this.user = user;
 
     if(user) {
@@ -91,6 +138,7 @@ export default class Store {
     const userId = `${_.get(this.user, '_id', null)}`;
     this.user = null;
     localStorage.removeItem('me');
+    localStorage.removeItem('token');
 
     if(userId) {
       this.users = this.users.remove();
@@ -160,16 +208,7 @@ export default class Store {
     }
   }
 
-  searchUsers(search = '') {
-    //const keyword = _.toLower(search);
-    // let searchItems = new OrderedMap();
-    // const currentUser = this.getCurrentUser();
-    // const currentUserId = _.get(currentUser, '_id');
-
-    // if(_.trim(search).length) {
-    //   searchItems = users.filter((user) => _.get(user, '_id') !== currentUserId && _.includes(_.toLower(_.get(user, 'name')), keyword));
-    // }
-
+  getSearchUsers() {
     return this.search.users.valueSeq();
   }
 
