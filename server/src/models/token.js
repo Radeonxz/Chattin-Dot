@@ -47,7 +47,7 @@ export default class Token {
   }
 
   findTokenById(id, callback = () => {}) {
-    console.log('Begin to query token from db...');
+    // console.log('Begin to query token from db...');
     const idObject = new ObjectId(id);
     const query = {_id: idObject};
     this.app.db.collection('tokens').findOne(query, (err, result) => {

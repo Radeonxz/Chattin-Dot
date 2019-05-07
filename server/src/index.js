@@ -27,6 +27,10 @@ app.use(bodyParser.json({
   limit: '50mb'
 }));
 
+app.wss = new Server({
+  server: app.server
+});
+
 // Connect to MongoDB
 const mongodbURI = process.env.MONGODB_URI;
 console.log('mongodbURI', mongodbURI);
@@ -46,10 +50,6 @@ app.models = new Model(app);
 
 // Import app-router
 app.routers = new AppRouter(app);
-
-app.wss = new Server({
-  server: app.server
-});
 
 /*
 let clients = [];
