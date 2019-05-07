@@ -1,6 +1,7 @@
 import {OrderedMap} from 'immutable'
 import _ from 'lodash'
-import Service from './service';
+import Service from './service'
+import Realtime from './realtime'
 
 // const users = OrderedMap({
 //   '1': {_id: '1', email: 'xuan@123.com', name: 'Xuan Zhao VeryLong', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@alex.png'},
@@ -29,6 +30,12 @@ export default class Store {
     this.search = {
       users: new OrderedMap(),
     }
+
+    this.realtime = new Realtime(this);
+  }
+
+  getUserTokenId() {
+    return _.get(this.token, '_id', null);
   }
 
   loadUserAvatar(user) {
@@ -241,9 +248,18 @@ export default class Store {
 
     if(channelId){     
       let channel = this.channels.get(channelId);
-      channel.isNew = false;
+      
       channel.lastMessage = _.get(message, 'body', '');
-      channel.messages = channel.messages.set(id, true);
+
+      // send this channel info to the server
+      const obj = {
+        action: 'create_channel',
+        payload: channel,
+      }
+      this.realtime.send(obj);
+
+      channel.messages = channel.messages.set(id, true);      
+      channel.isNew = false;
       this.channels = this.channels.set(channelId, channel);
     }
 

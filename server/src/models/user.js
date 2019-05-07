@@ -98,7 +98,7 @@ export default class User {
   }
 
   findUserById(id, callback = () => {}) {
-    console.log('first query in db');
+    // console.log('first query in db');
     if(!id) {
       return callback({message: 'Non valid user id'}, null);
     }
