@@ -34,6 +34,12 @@ export default class Store {
     this.realtime = new Realtime(this);
   }
 
+  addUserToCache(user) {
+    user.avatar = this.loadUserAvatar(user);
+    const id =`${user._id}`;
+    this.users = this.users.set(id, user);
+  }
+
   getUserTokenId() {
     return _.get(this.token, '_id', null);
   }
