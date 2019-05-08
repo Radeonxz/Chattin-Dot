@@ -32,7 +32,53 @@ export default class connection {
     const payload = _.get(msg, 'payload');
     switch(action) {
       case 'create_channel':
-        const channel = payload;
+        let channel = payload;
+        const userConnection = this.connections.get(socketId);
+        const userId = userConnection.userId;
+        channel.userId = userId;
+
+        this.app.models.channel.create(channel).then((channelObject) => {
+          // Successfully created new channel
+          console.log('successfully ceated new channel', channelObject);
+
+          // Send notification to all members in this channel
+          let memberConnections = [];
+          const memberIds = _.get(channelObject, 'members', []);
+
+          // fetch all users has memberId
+          const query = {
+            _id: {$in: memberIds}
+          };
+
+          const queryOptions = {
+            _id: 1,
+            nema: 1,
+            created: 1,
+          };
+
+          this.app.models.user.find(query, queryOptions).then((users) => {
+            channelObject.users = users;
+
+            _.each(memberIds, (id) => {
+              const userId = id.toString();
+              const memberConnection = this.connections.filter((con) => `${con.userId}` === userId);
+              if(memberConnection.size) {
+                memberConnection.forEach((con) => {
+                  const ws = con.ws;
+                  const obj = {
+                    action: 'channel_added',
+                    payload: channelObject,
+                  }
+  
+                  // send to socket client for matched userid users
+                  this.send(ws, obj);
+                });
+                console.log('memberconnections', memberConnection);
+              }
+            });
+          });
+          // const memberConnections = this.connections.filter((con) => `${con.userId}` = )
+        });
         console.log('sss', channel);
         break;
 

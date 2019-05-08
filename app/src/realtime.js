@@ -1,9 +1,60 @@
+import _ from 'lodash';
+import { OrderedMap } from 'immutable';
+
 export default class realtime {
   constructor(store) {
     this.store = store;
     this.ws = null;
     this.isConnected = false;
     this.connect();
+  }
+
+  decodeMessage(msg) {
+    let message = {};
+    try {
+      message = JSON.parse(msg);
+    } catch(err) {
+      console.log(err);
+    }
+    return message;
+  }
+
+  readMessage(msg) {
+    const store = this.store;
+    const message = this.decodeMessage(msg);
+    const action = _.get(message, 'action', '');
+    const payload = _.get(message, 'payload');
+    switch(action) {
+      case 'channel_added':
+        // check payload object and insert new channel to store
+        const channelId = `${payload._id}`;
+        const userId = `${payload.userId}`;
+
+        const users = _.get(payload, 'users', []);
+
+        let channel = {
+          _id: channelId,
+          title: _.get(payload, 'title', ''),
+          lastMessage: _.get(payload, 'lastMessage', ''),
+          members: new OrderedMap(),
+          messages: new OrderedMap(),
+          isNew: false,
+          userId: userId,
+          created: new Date(),
+        };
+
+        _.each(users, (user) => {
+          // add this user to store.user collection
+          const memberId = `${user._id}`;
+          this.store.addUserToCache(user);
+          channel.members = channel.members.set(memberId, true);
+        });
+
+        store.addChannel(channelId, channel);
+        break;
+      default:
+        break;
+    }
   }
 
   send(msg = {}) {
@@ -37,6 +88,8 @@ export default class realtime {
       this.authtication();
 
       ws.onmessage = (event) => {
+        this.readMessage(_.get(event, 'data'));
+
         console.log('CLIENT server says', event.data);
       }
 
