@@ -179,6 +179,9 @@ export default class Store {
         const user = _.get(accessToken, 'user');
         this.setCurrentUser(user);
         this.setUserToken(accessToken);
+
+        // call to realtime and connect to socket server with current user
+        this.realtime.connect();
       }).catch((err) => {
         // login error
         console.log('got err from server', err);
@@ -261,8 +264,14 @@ export default class Store {
       const obj = {
         action: 'create_channel',
         payload: channel,
-      }
+      };
       this.realtime.send(obj);
+
+      // send to the server via websocket to create new message and notifu to other members
+      this.realtime.send({
+        action: 'create_message',
+        payload: message,
+      });
 
       channel.messages = channel.messages.set(id, true);      
       channel.isNew = false;

@@ -30,16 +30,46 @@ export default class connection {
   doTheJob(socketId, msg) {
     const action = _.get(msg, 'action');
     const payload = _.get(msg, 'payload');
+    const userConnection = this.connections.get(socketId);
+
     switch(action) {
+      case 'create_message':
+        if(userConnection.isAuthenticated) {
+          let messageObject = payload;
+          messageObject.userId = _.get(userConnection, 'userId');
+          console.log('got msg from client about creating new message', payload);
+
+          this.app.models.message.create(messageObject).then((message) => {
+            const userId = _.toString(message.userId);
+            this.app.models.user.load(userId).then((user) => {
+              message.user = user;
+              
+            })
+            // message created successful
+
+
+          }).catch(err => {
+            // send back to the socket client who sent this meesage with error
+            const ws =userConnection.ws;
+            this.send(ws, {
+              action: 'create_message_error',
+              payload: payload,
+            });
+          })
+        }
+        
+      
+      
+        break;
+
       case 'create_channel':
         let channel = payload;
-        const userConnection = this.connections.get(socketId);
         const userId = userConnection.userId;
         channel.userId = userId;
 
         this.app.models.channel.create(channel).then((channelObject) => {
           // Successfully created new channel
-          console.log('successfully ceated new channel', channelObject);
+          // console.log('successfully ceated new channel', channelObject);
 
           // Send notification to all members in this channel
           let memberConnections = [];
