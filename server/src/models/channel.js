@@ -11,7 +11,34 @@ export default class Channel{
   }
 
   load(id) {
+    return new Promise ((resolve, reject) => {
+      id = _.toString(id);
+    
+      // find in cache
+      const channelFromCache = this.channels.get(id);
 
+      if(channelFromCache) {
+        return resolve(channelFromCache);
+      }
+
+      // find in db if not found
+      this.findById(id).then((c) => {
+        return c;
+      }).catch((err) => {
+        return reject(err);
+      });
+    });
+  }
+
+  findById(id) {
+    return new Promise((resolve, reject) => {
+      this.app.db.collection('channels').findOne({_id: new ObjectID(id)}, (err, result) => {
+        if(err || !result) {
+          return reject(err ? err : 'Not Found');
+        }
+        return resolve(result);
+      });
+    })
   }
 
   create(obj) {
