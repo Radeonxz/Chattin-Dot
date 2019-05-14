@@ -37,13 +37,27 @@ export default class connection {
         if(userConnection.isAuthenticated) {
           let messageObject = payload;
           messageObject.userId = _.get(userConnection, 'userId');
-          console.log('got msg from client about creating new message', payload);
+          // console.log('got msg from client about creating new message', payload);
 
           this.app.models.message.create(messageObject).then((message) => {
-            const userId = _.toString(message.userId);
-            this.app.models.user.load(userId).then((user) => {
-              message.user = user;
-              
+            console.log('created new message', message);
+
+            const channelId = _.toString(_.get(message, 'channelId'));
+            this.app.models.channel.load(channelId).then((channel) => {
+              console.log('got channel of the message', channel);
+              const memberIds = _.get(channel, 'members', []);
+
+              _.each(memberIds, (memberId) => {
+                memberId = _.toString(memberId);
+                const memberConnections = this.connections.filter((c) => _.toString(c.userId) === memberId);
+                memberConnections.forEach((connection) => {
+                  const ws = connection.ws;
+                  this.send(ws, {
+                    action: 'message_added',
+                    payload: message,
+                  })
+                })
+              })
             })
             // message created successful
 
