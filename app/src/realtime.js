@@ -21,10 +21,30 @@ export default class realtime {
 
   readMessage(msg) {
     const store = this.store;
+    const currentUser = store.getCurrentUser();
+    const currentUserId = _.toString(_.get(currentUser, '_id'));
     const message = this.decodeMessage(msg);
     const action = _.get(message, 'action', '');
     const payload = _.get(message, 'payload');
     switch(action) {
+      case 'message_added':
+        const user = _.get(payload, 'user');
+
+        // add this user to cache
+        store.addUserToCache(user);
+
+        const messageObject = {
+          _id: message._id,
+          body: _.get(payload, 'body', ''),
+          userId: _.get(payload, 'userId'),
+          channelId: _.get(payload, 'channelId'),
+          created: _.get(payload, 'created', new Date()),
+          me: currentUserId === _.toString(_.get(payload, 'userId')),
+        };
+
+        console.log('message with message obj', messageObject)
+        store.setMessage(messageObject);
+        break;
       case 'channel_added':
         // check payload object and insert new channel to store
         const channelId = `${payload._id}`;

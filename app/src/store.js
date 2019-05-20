@@ -36,7 +36,7 @@ export default class Store {
 
   addUserToCache(user) {
     user.avatar = this.loadUserAvatar(user);
-    const id =`${user._id}`;
+    const id = _.toString(user.id);
     this.users = this.users.set(id, user);
   }
 
@@ -247,6 +247,13 @@ export default class Store {
   getActiveChannel() {
     const channel = this.activeChannelId ? this.channels.get(this.activeChannelId) : this.channels.first();
     return channel;
+  }
+
+  setMessage(message) {
+    const id = _.toString(_.get(message, '_id'));
+    this.messages = this.messages.set(id, message);
+
+    this.update();
   }
 
   addMessage(id, message = {}) {
