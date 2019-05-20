@@ -5,6 +5,7 @@ import { ObjectID } from 'mongodb'
 export default class Message {
   constructor(app) {
     this.app = app;
+    this.message = new OrderedMap();
   }
 
   create(obj) {

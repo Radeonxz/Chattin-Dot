@@ -57,7 +57,7 @@ export default class connection {
                     payload: message,
                   })
                 })
-              })
+              });
             })
             // message created successful
 
