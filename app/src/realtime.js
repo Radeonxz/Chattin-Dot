@@ -28,18 +28,19 @@ export default class realtime {
     const payload = _.get(message, 'payload');
     switch(action) {
       case 'message_added':
-        const user = _.get(payload, 'user');
+        let user = _.get(payload, 'user');
 
         // add this user to cache
-        store.addUserToCache(user);
+        user = store.addUserToCache(user);
 
         const messageObject = {
-          _id: message._id,
+          _id: payload._id,
           body: _.get(payload, 'body', ''),
           userId: _.get(payload, 'userId'),
           channelId: _.get(payload, 'channelId'),
           created: _.get(payload, 'created', new Date()),
           me: currentUserId === _.toString(_.get(payload, 'userId')),
+          user: user,
         };
 
         console.log('message with message obj', messageObject)
