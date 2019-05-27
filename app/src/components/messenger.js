@@ -231,7 +231,7 @@ export default class Messenger extends Component {
                       <img src = {_.get(user, 'avatar')} alt = '' />
                     </div>
                     <div className = 'msg-body'>
-                      <div className = 'msg-author'>{message.me ? 'You' : _.get(user, 'name')} say:</div>
+                      <div className = 'msg-author'>{message.me ? 'You' : _.get(message, 'user.name')} says:</div>
                       <div className = 'msg-text'>
                         {this.renderMessage(message)}
                       </div>
@@ -263,15 +263,15 @@ export default class Messenger extends Component {
               <div className = 'members'>
                 {members.map((member, key) => {
                   return (
-                  <div key = {key} className = 'member'>
-                    <div className = 'user-img'>
-                      <img src = {_.get(member, 'avatar')} alt = '' />
+                    <div key = {key} className = 'member'>
+                      <div className = 'user-img'>
+                        <img src = {_.get(member, 'avatar')} alt = '' />
+                      </div>
+                      <div className = 'member-info'>
+                        <h2>{member.name}</h2>
+                        <p>Joined: {moment(member.created).fromNow()}</p>
+                      </div>
                     </div>
-                    <div className = 'member-info'>
-                      <h2>{member.name}</h2>
-                      <p>Joined: {moment(member.created).fromNow()}</p>
-                    </div>
-                  </div>
                   )
                 })}
               </div>

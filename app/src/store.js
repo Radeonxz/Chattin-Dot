@@ -36,8 +36,10 @@ export default class Store {
 
   addUserToCache(user) {
     user.avatar = this.loadUserAvatar(user);
-    const id = _.toString(user.id);
+    const id = _.toString(user._id);
     this.users = this.users.set(id, user);
+
+    return user;
   }
 
   getUserTokenId() {
@@ -252,6 +254,12 @@ export default class Store {
   setMessage(message) {
     const id = _.toString(_.get(message, '_id'));
     this.messages = this.messages.set(id, message);
+    const channelId = _.toString(message.channelId);
+    const channel = this.channels.get(channelId);
+
+    if(channel) {
+      channel.messages = channel.messages.set(id, true);
+    }
 
     this.update();
   }
@@ -296,15 +304,10 @@ export default class Store {
     let messages = new OrderedMap();
 
     if(channel){
-      // channel.messages.map((value, key) => {
-      //   const message = this.messages.get(key);
-      //   messages.push(message);
-      // });
-
       channel.messages.forEach((value, key) => {
         const message = this.messages.get(key);
         messages = messages.set(key, message);
-      })
+      });
     }
 
     return messages.valueSeq();
