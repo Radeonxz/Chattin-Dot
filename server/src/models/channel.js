@@ -23,7 +23,7 @@ export default class Channel{
 
       // find in db if not found
       this.findById(id).then((c) => {
-        return c;
+        return resolve(c);
       }).catch((err) => {
         return reject(err);
       });

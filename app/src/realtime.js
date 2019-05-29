@@ -48,34 +48,39 @@ export default class realtime {
         break;
       case 'channel_added':
         // check payload object and insert new channel to store
-        const channelId = `${payload._id}`;
-        const userId = `${payload.userId}`;
-
-        const users = _.get(payload, 'users', []);
-
-        let channel = {
-          _id: channelId,
-          title: _.get(payload, 'title', ''),
-          lastMessage: _.get(payload, 'lastMessage', ''),
-          members: new OrderedMap(),
-          messages: new OrderedMap(),
-          isNew: false,
-          userId: userId,
-          created: new Date(),
-        };
-
-        _.each(users, (user) => {
-          // add this user to store.user collection
-          const memberId = `${user._id}`;
-          this.store.addUserToCache(user);
-          channel.members = channel.members.set(memberId, true);
-        });
-
-        store.addChannel(channelId, channel);
+        this.onAddChannel(payload);
+        
         break;
       default:
         break;
     }
+  }
+
+  onAddChannel(payload) {
+    const store = this.store;
+    const channelId = `${payload._id}`;
+    const userId = `${payload.userId}`;
+    const users = _.get(payload, 'users', []);
+
+    let channel = {
+      _id: channelId,
+      title: _.get(payload, 'title', ''),
+      lastMessage: _.get(payload, 'lastMessage', ''),
+      members: new OrderedMap(),
+      messages: new OrderedMap(),
+      isNew: false,
+      userId: userId,
+      created: new Date(),
+    };
+
+    _.each(users, (user) => {
+      // add this user to store.user collection
+      const memberId = `${user._id}`;
+      this.store.addUserToCache(user);
+      channel.members = channel.members.set(memberId, true);
+    });
+
+    store.addChannel(channelId, channel);
   }
 
   send(msg = {}) {

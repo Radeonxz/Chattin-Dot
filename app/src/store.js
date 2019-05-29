@@ -259,6 +259,16 @@ export default class Store {
 
     if(channel) {
       channel.messages = channel.messages.set(id, true);
+    } else {
+      // fetch channel info from server
+      this.server.get(`api/channels/${channelId}`).then((response) => {
+        const channel = _.get(response, 'data');
+        // const users = _.get(channel, 'users');
+        // _.each(users, (user) => {
+        //   this.addUserToCache(user);
+        // });
+        this.realtime.onAddChannel(channel);
+      });
     }
 
     this.update();
