@@ -71,7 +71,7 @@ export default class Store {
       this.update();
     }).catch((err) => {
       console.log('searching error', err);
-    })
+    });
   }
 
   setUserToken(accessToken) {
