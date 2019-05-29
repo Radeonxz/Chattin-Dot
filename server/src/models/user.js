@@ -34,8 +34,8 @@ export default class User {
           return reject({messae: 'User not Found'});
         }
         return resolve(results);
-      })
-    })
+      });
+    });
   }
 
   login(user) {
@@ -68,10 +68,9 @@ export default class User {
           return resolve(token);
         }).catch(err => {
           return reject({message: 'Login Error'});
-        })
-        
-      })
-    })
+        });
+      });
+    });
   }
 
   findUserByEmail(email, callback = () => {}) {

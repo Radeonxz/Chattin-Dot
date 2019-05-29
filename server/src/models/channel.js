@@ -38,7 +38,7 @@ export default class Channel{
         }
         return resolve(result);
       });
-    })
+    });
   }
 
   create(obj) {

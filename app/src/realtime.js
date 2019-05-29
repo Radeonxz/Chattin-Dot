@@ -43,7 +43,7 @@ export default class realtime {
           user: user,
         };
 
-        console.log('message with message obj', messageObject)
+        console.log('message with message obj', messageObject);
         store.setMessage(messageObject);
         break;
       case 'channel_added':

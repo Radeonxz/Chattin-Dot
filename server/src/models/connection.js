@@ -55,8 +55,8 @@ export default class connection {
                   this.send(ws, {
                     action: 'message_added',
                     payload: message,
-                  })
-                })
+                  });
+                });
               });
             })
             // message created successful
@@ -69,7 +69,7 @@ export default class connection {
               action: 'create_message_error',
               payload: payload,
             });
-          })
+          });
         }
         
       
@@ -184,7 +184,7 @@ export default class connection {
       ws.on('close', () => {
         // remove this socket client from cache collection
         this.connections = this.connections.remove(socketId);
-      })
+      });
     });
   }
 }
