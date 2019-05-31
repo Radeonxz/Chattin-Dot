@@ -17,21 +17,29 @@ export default class Store {
     this.channels = new OrderedMap();
     this.activeChannelId = null;
     
-    // Current logged in user
-    // this.user = {
-    //   _id: '1',
-    //   name: 'Xuan Zhao VeryLong',
-    //   avatar: 'https://api.adorable.io/avatars/100/abott@alex.png',
-    //   created: new Date(),
-    // }
     this.token = this.getTokenFromLocalStorage();
+
     this.user = this.getUserFromLocalStorage();
     this.users = new OrderedMap();
+
     this.search = {
       users: new OrderedMap(),
     }
 
     this.realtime = new Realtime(this);
+    this.fetchUserChannels();
+  }
+
+  fetchUserChannels() {
+    const userToken = this.getUserTokenId();
+
+    if(userToken) {
+      this.service.get(`api/me/channels`).then((response) => {
+        const channels = response.data;
+      }).catch((err) => {
+        console.log('An error has occured during fetching user channels', err);
+      })
+    }
   }
 
   addUserToCache(user) {
@@ -184,6 +192,9 @@ export default class Store {
 
         // call to realtime and connect to socket server with current user
         this.realtime.connect();
+
+        // start fetching user channel
+        this.fetchUserChannels();
       }).catch((err) => {
         // login error
         console.log('got err from server', err);
