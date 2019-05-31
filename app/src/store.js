@@ -261,7 +261,7 @@ export default class Store {
       channel.messages = channel.messages.set(id, true);
     } else {
       // fetch channel info from server
-      this.server.get(`api/channels/${channelId}`).then((response) => {
+      this.service.get(`api/channels/${channelId}`).then((response) => {
         const channel = _.get(response, 'data');
         // const users = _.get(channel, 'users');
         // _.each(users, (user) => {
