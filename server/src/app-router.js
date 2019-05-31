@@ -43,6 +43,7 @@ export default class AppRouter {
     * @endpoint: /api/users/me
     * @method: GET
     **/
+
     app.get('/api/users/me', (req, res, next) => {
       let tokenId = req.get('authorization');
       if(!tokenId) {
@@ -79,6 +80,7 @@ export default class AppRouter {
     * @endpoint: /api/users/:id
     * @method: GET
     **/
+
     app.get('/api/users/:id', (req, res, next) => {
       const userId = _.get(req, 'params.id');
 
@@ -143,5 +145,26 @@ export default class AppRouter {
       })
     });
 
+    /**
+    * @endpoint: /api/me/channels
+    * @method: GET
+    **/
+
+    app.get('/api/me/channels', (req, res, next) => {
+      let tokenId = req.get('authorization');
+      if(!tokenId) {
+        // get token from query
+        tokenId = _.get(req, 'query.auth');
+      }
+
+      app.models.token.loadTokenAndUser(tokenId).then((token) => {
+        return res.json(token);
+      }).catch(err => {
+        return res.status(401).json({
+          error: 'Access Denied.'
+        })
+      });
+
+    })
   }
 }
