@@ -34,7 +34,12 @@ export default class Store {
     const userToken = this.getUserTokenId();
 
     if(userToken) {
-      this.service.get(`api/me/channels`).then((response) => {
+      const options = {
+        headers: {
+          authorization: userToken,
+        }
+      };
+      this.service.get(`api/me/channels`, options).then((response) => {
         const channels = response.data;
       }).catch((err) => {
         console.log('An error has occured during fetching user channels', err);
@@ -202,17 +207,6 @@ export default class Store {
         return reject(message);
       });
     });
-
-    // return new Promise((resolve, reject) => {
-    //   const user = users.find((user) => user.email === userEmail);
-      
-    //   if(user) {
-    //     _this.setCurrentUser(user);
-    //   }
-    //   return user ? resolve(user) : reject('User not found');
-    // });
-
-    
   }
 
   removeMemberFromChannel(channel = null, user = null) {

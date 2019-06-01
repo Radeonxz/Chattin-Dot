@@ -158,7 +158,12 @@ export default class AppRouter {
       }
 
       app.models.token.loadTokenAndUser(tokenId).then((token) => {
-        return res.json(token);
+        const userId = token.userId;
+        app.models.channel.find(query, null).then((channels) => {
+          return res.status(200).json(channels);
+        }).catch((err) => {
+          return res.status(404).json({error: {message: 'Not Found'}});
+        });
       }).catch(err => {
         return res.status(401).json({
           error: 'Access Denied.'
