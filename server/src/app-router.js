@@ -159,7 +159,45 @@ export default class AppRouter {
 
       app.models.token.loadTokenAndUser(tokenId).then((token) => {
         const userId = token.userId;
-        app.models.channel.find(query, null).then((channels) => {
+        const query = [
+          {
+            $lookup : {
+              from: 'users',
+              localField: 'members',
+              foreignField: '_id',
+              as: 'users',
+            }
+          },
+          {
+            $match: {
+              members: {$all: [userId]}
+            }
+          },
+          {
+            $project: {
+              _id: true,
+              title: true,
+              lastMessage: true,
+              created: true,
+              updated: true,
+              userId: true,
+              users: {
+                _id: true,
+                name: true,
+                created: true,
+              },
+              members: true,
+            }
+          },
+          {
+            $sort: {updated: -1, created: -1}
+          },
+          {
+            $limit: 50,
+          }
+        ];
+
+        app.models.channel.aggregate(query).then((channels) => {
           return res.status(200).json(channels);
         }).catch((err) => {
           return res.status(404).json({error: {message: 'Not Found'}});
