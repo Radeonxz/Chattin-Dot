@@ -28,6 +28,14 @@ export default class Message {
           return reject(err);
         }
 
+        // Update last message field to channel
+        this.app.db.collection('channels').findOneAndUpdate({_id: channelId}, {
+          $set: {
+            lastMessage: _.get(message, 'body', ''),
+            updated: new Date(),
+          }
+        });
+
         this.app.models.user.load(_.toString(userId)).then((user) => {
           _.unset(user, 'password');
           _.unset(user, 'email');

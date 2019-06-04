@@ -77,6 +77,7 @@ export default class realtime {
       isNew: false,
       userId: userId,
       created: new Date(),
+      // updated: new Date(),
     };
 
     _.each(users, (user) => {

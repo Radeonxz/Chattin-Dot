@@ -367,7 +367,7 @@ export default class Store {
 
   getChannels() {
     //sort channel by date
-    this.channels = this.channels.sort((a, b) => a.created < b.created);
+    this.channels = this.channels.sort((a, b) => a.updated < b.updated);
     return this.channels.valueSeq();
   }
 

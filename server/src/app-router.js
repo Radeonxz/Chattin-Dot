@@ -179,6 +179,7 @@ export default class AppRouter {
               title: true,
               lastMessage: true,
               created: true,
+              updated: true,
               userId: true,
               users: {
                 _id: true,
@@ -189,7 +190,7 @@ export default class AppRouter {
             }
           },
           {
-            $sort: {created: -1}
+            $sort: {updated: -1, created: -1}
           },
           {
             $limit: 50,
