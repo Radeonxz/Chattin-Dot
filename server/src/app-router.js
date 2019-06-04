@@ -159,6 +159,10 @@ export default class AppRouter {
 
       app.models.token.loadTokenAndUser(tokenId).then((token) => {
         const userId = token.userId;
+        const query = {
+          members: {$all: [userId]}
+        };
+
         app.models.channel.find(query, null).then((channels) => {
           return res.status(200).json(channels);
         }).catch((err) => {
