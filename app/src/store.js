@@ -41,6 +41,10 @@ export default class Store {
       };
       this.service.get(`api/me/channels`, options).then((response) => {
         const channels = response.data;
+
+        _.each(channels, (c) => {
+          this.realtime.onAddChannel(c);
+        });
       }).catch((err) => {
         console.log('An error has occured during fetching user channels', err);
       })
@@ -264,6 +268,7 @@ export default class Store {
 
     if(channel) {
       channel.messages = channel.messages.set(id, true);
+      channel.lastMessage = _.get(message, 'body', '');
     } else {
       // fetch channel info from server
       this.service.get(`api/channels/${channelId}`).then((response) => {

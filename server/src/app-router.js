@@ -169,6 +169,11 @@ export default class AppRouter {
             }
           },
           {
+            $match: {
+              members: {$all: [userId]}
+            }
+          },
+          {
             $project: {
               _id: true,
               title: true,
@@ -182,6 +187,12 @@ export default class AppRouter {
               },
               members: true,
             }
+          },
+          {
+            $sort: {created: -1}
+          },
+          {
+            $limit: 50,
           }
         ];
 
