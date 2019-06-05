@@ -150,14 +150,21 @@ export default class AppRouter {
     * @method: GET
     **/
 
-    app.get('api/channels/:id/messages', (req, res, next) => {
+        filter = JSON.parse(filter);
+        app.get('api/channels/:id/messages', (req, res, next) => {
       // check user is logged in
 
       // check whether channel has this user, if not return 401
       
-      const channelId = _.get(req, 'params.id');
+      let filter = _.get('query.filter', null);
+      if(filter) {
+        filter = JSON.parse(filter);
+      }
+      const channelId = _.toString(_.get(req, 'params.id'));
+      const limit = _.get(filter, 'limit', 50);
+      const offset = _.get(filter, 'offser', 0);
 
-      this.app.models.message.getMessageByChannelId(channelId).then((messages) => {
+      this.app.models.message.getChannelMessages(channelId, limit, offset).then((messages) => {
         return res.status(200).json(messages);
       }).catch((err) => {
         return res.status(404).json({error: {message: 'Not Found.'}});
