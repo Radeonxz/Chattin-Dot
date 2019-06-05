@@ -146,6 +146,25 @@ export default class AppRouter {
     });
 
     /**
+    * @endpoint: /api/me/channels/:id/messages
+    * @method: GET
+    **/
+
+    app.get('api/channels/:id/messages', (req, res, next) => {
+      // check user is logged in
+
+      // check whether channel has this user, if not return 401
+      
+      const channelId = _.get(req, 'params.id');
+
+      this.app.models.message.getMessageByChannelId(channelId).then((messages) => {
+        return res.status(200).json(messages);
+      }).catch((err) => {
+        return res.status(404).json({error: {message: 'Not Found.'}});
+      });
+    });
+
+    /**
     * @endpoint: /api/me/channels
     * @method: GET
     **/
