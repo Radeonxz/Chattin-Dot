@@ -8,6 +8,15 @@ export default class Message {
     this.message = new OrderedMap();
   }
 
+  getChannelMessages(channelId, limit = 50, offset = 0) {
+    return new Promise((resolve, reject) => {
+      channelId = new ObjectID(channelId);
+        this.app.db.collection('messages').find({channelId: channelId}).skip(offset).limit(limit).toArray((err, messages) => {
+          return err ? reject(err) : resolve(messages);
+      });
+    })
+  }
+
   create(obj) {
     return new Promise((resolve, reject) => {
       let id = _.get(obj, '_id', null);
