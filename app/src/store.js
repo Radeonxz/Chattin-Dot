@@ -166,11 +166,19 @@ export default class Store {
     this.update();
   }
 
+  clearCacheData() {
+    this.channels = this.channels.clear();
+    this.messages = this.messages.clear();
+    this.users = this.users.clear();
+  }
+
   signOut() {
     const userId = `${_.get(this.user, '_id', null)}`;
     this.user = null;
     localStorage.removeItem('me');
     localStorage.removeItem('token');
+
+    this.clearCacheData();
 
     if(userId) {
       this.users = this.users.remove();
@@ -250,8 +258,24 @@ export default class Store {
     return this.user;
   }
 
+  fetchChannelMessages(channelId) {
+    if(channelId) {
+      this.service.get(`api/channels/${channelId}/messages`).then((response) => {
+        const messages = response.data;
+        _.each(messages, (message) => {
+          this.realtime.onAddMessage(message);
+        });
+      }).catch((err) => {
+        console.log('Error!', err);
+      });
+    }
+  }
+
   setActiveChannelId(id) {
     this.activeChannelId = id;
+
+    this.fetchChannelMessages(id);
+
     this.update();
   }
 
