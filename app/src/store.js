@@ -45,6 +45,9 @@ export default class Store {
         _.each(channels, (c) => {
           this.realtime.onAddChannel(c);
         });
+
+        const firstChannelId = _.get(channels, '[0]._id', null);
+        this.fetchChannelMessages(firstChannelId);
       }).catch((err) => {
         console.log('An error has occured during fetching user channels', err);
       })
@@ -166,11 +169,19 @@ export default class Store {
     this.update();
   }
 
+  clearCacheData() {
+    this.channels = this.channels.clear();
+    this.messages = this.messages.clear();
+    this.users = this.users.clear();
+  }
+
   signOut() {
     const userId = `${_.get(this.user, '_id', null)}`;
     this.user = null;
     localStorage.removeItem('me');
     localStorage.removeItem('token');
+
+    this.clearCacheData();
 
     if(userId) {
       this.users = this.users.remove();
@@ -250,8 +261,31 @@ export default class Store {
     return this.user;
   }
 
+  fetchChannelMessages(channelId) {
+    let channel = this.channels.get(channelId);
+    if(channel && !_.get(channel, 'isFetchedMessages')) {
+      this.service.get(`api/channels/${channelId}/messages`).then((response) => {
+        channel.isFetchedMessages = true;       
+        const messages = response.data;
+        
+        _.each(messages, (message) => {
+          this.realtime.onAddMessage(message);
+        });
+        this.channels = this.channels.set(channelId, channel)
+      }).catch((err) => {
+        console.log('Error!', err);
+      });
+    }
+    if(channelId) {
+      
+    }
+  }
+
   setActiveChannelId(id) {
     this.activeChannelId = id;
+
+    this.fetchChannelMessages(id);
+
     this.update();
   }
 
