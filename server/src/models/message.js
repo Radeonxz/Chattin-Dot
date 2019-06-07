@@ -19,13 +19,15 @@ export default class Message {
           {
             $lookup: {
               from: 'users',
-              localFields: 'users',
-              foreignFields: '_id',
+              localField: 'userId',
+              foreignField: '_id',
               as: 'user',
             }
           },
           {
-            $match: {channelId: {$eq: channelId}}
+            $match: {
+              'channelId': {$eq: channelId}
+            }
           },
           {
             $project: {

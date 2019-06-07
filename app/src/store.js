@@ -45,6 +45,9 @@ export default class Store {
         _.each(channels, (c) => {
           this.realtime.onAddChannel(c);
         });
+
+        const firstChannelId = _.get(channels, '[0]._id', null);
+        this.fetchChannelMessages(firstChannelId);
       }).catch((err) => {
         console.log('An error has occured during fetching user channels', err);
       })
@@ -259,15 +262,22 @@ export default class Store {
   }
 
   fetchChannelMessages(channelId) {
-    if(channelId) {
+    let channel = this.channels.get(channelId);
+    if(channel && !_.get(channel, 'isFetchedMessages')) {
       this.service.get(`api/channels/${channelId}/messages`).then((response) => {
+        channel.isFetchedMessages = true;       
         const messages = response.data;
+        
         _.each(messages, (message) => {
           this.realtime.onAddMessage(message);
         });
+        this.channels = this.channels.set(channelId, channel)
       }).catch((err) => {
         console.log('Error!', err);
       });
+    }
+    if(channelId) {
+      
     }
   }
 
