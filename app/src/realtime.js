@@ -28,7 +28,8 @@ export default class realtime {
     const payload = _.get(message, 'payload');
     switch(action) {
       case 'message_added':
-        this.onAddMessage(payload);
+        let notify = true;
+        this.onAddMessage(payload, notify);
         
         break;
       case 'channel_added':
@@ -41,7 +42,7 @@ export default class realtime {
     }
   }
 
-  onAddMessage(payload) {
+  onAddMessage(payload, notify = false) {
     const store = this.store;
     const currentUser = store.getCurrentUser();
     const currentUserId = _.toString(_.get(currentUser, '_id'));
@@ -59,7 +60,7 @@ export default class realtime {
       user: user,
     };
 
-    store.setMessage(messageObject);
+    store.setMessage(messageObject, notify);
   }
 
   onAddChannel(payload) {
