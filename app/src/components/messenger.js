@@ -207,7 +207,7 @@ export default class Messenger extends Component {
                 return (
                   <div onClick = {(key) => {
                     store.setActiveChannelId(channel._id);
-                  }} key = {channel._id} className = {classNames('channel', {'active': _.get(activeChannel, '_id') === _.get(channel, '_id', null)})}>
+                  }} key = {channel._id} className = {classNames('channel', {'notify': _.get(channel, 'notify') === true}, {'active': _.get(activeChannel, '_id') === _.get(channel, '_id', null)})}>
                     <div className = 'user-img'>
                       <img src = {avatar} alt = '' />
                     </div>

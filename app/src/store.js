@@ -294,7 +294,7 @@ export default class Store {
     return channel;
   }
 
-  setMessage(message) {
+  setMessage(message, notify = false) {
     const id = _.toString(_.get(message, '_id'));
     this.messages = this.messages.set(id, message);
     const channelId = _.toString(message.channelId);
@@ -303,6 +303,8 @@ export default class Store {
     if(channel) {
       channel.messages = channel.messages.set(id, true);
       channel.lastMessage = _.get(message, 'body', '');
+      channel.notify = notify;
+      this.channels = this.channels.set(channelId, channel);
     } else {
       // fetch channel info from server
       this.service.get(`api/channels/${channelId}`).then((response) => {
