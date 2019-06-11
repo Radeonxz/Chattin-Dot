@@ -39,6 +39,7 @@ export default class Channel{
 
       // find in db if not found
       this.findById(id).then((c) => {
+        this.channels = this.channels.set(id, c);
         return resolve(c);
       }).catch((err) => {
         return reject(err);
