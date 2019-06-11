@@ -28,7 +28,8 @@ export default class realtime {
     const payload = _.get(message, 'payload');
     switch(action) {
       case 'message_added':
-        let notify = true;
+        const activeChannel = store.getActiveChannel();
+        let notify = _.get(activeChannel, '_id') !== _.get(payload, 'channelId') && currentUserId !== _.get(payload, 'userId');
         this.onAddMessage(payload, notify);
         
         break;

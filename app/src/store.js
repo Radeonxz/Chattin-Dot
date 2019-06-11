@@ -264,7 +264,13 @@ export default class Store {
   fetchChannelMessages(channelId) {
     let channel = this.channels.get(channelId);
     if(channel && !_.get(channel, 'isFetchedMessages')) {
-      this.service.get(`api/channels/${channelId}/messages`).then((response) => {
+      const token = _.get(this.token, '_id')
+      const options = {
+        headers: {
+          authorization: token,
+        }
+      }
+      this.service.get(`api/channels/${channelId}/messages`, options).then((response) => {
         channel.isFetchedMessages = true;       
         const messages = response.data;
         
