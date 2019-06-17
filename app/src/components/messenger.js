@@ -243,7 +243,7 @@ export default class Messenger extends Component {
                       <img src = {_.get(user, 'avatar')} alt = '' />
                     </div>
                     <div className = 'msg-body'>
-                      <div className = 'msg-author'>{message.me ? 'You' : _.get(message, 'user.name')} says:</div>
+                      <div className = 'msg-author'>{message.me ? 'You' : _.get(message, 'user.name')} :</div>
                       <div className = 'msg-text'>
                         {this.renderMessage(message)}
                       </div>
