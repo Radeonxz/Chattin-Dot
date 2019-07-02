@@ -5,7 +5,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import {ObjectID} from '../helpers/objectid'
 
-import avatar from '../images/avatar.jpg'
+// import avatar from '../images/avatar.jpg'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -38,7 +38,7 @@ export default class Messenger extends Component {
     const maxDisplay = 4;
     const total = members.size > maxDisplay ? maxDisplay : members.size;
     const avatars = members.map((user, index) => {
-      return index < maxDisplay ? <img src = {_.get(user, 'avatar')} alt = {_.get(user, 'name')} /> : null;
+      return index < maxDisplay ? <img key = {index} src = {_.get(user, 'avatar')} alt = {_.get(user, 'name')} /> : null;
     });
     return <div className = {classNames('channel-avatars', `channel-avatars-${total}`)}>{avatars}</div>
   }
@@ -274,13 +274,15 @@ export default class Messenger extends Component {
               <h2 className = 'title'>Members</h2>
               <div className = 'members'>
                 {members.map((member, key) => {
+                  const isOnline = _.get(member, 'online', false);
+
                   return (
                     <div key = {key} className = 'member'>
                       <div className = 'user-img'>
                         <img src = {_.get(member, 'avatar')} alt = '' />
                       </div>
                       <div className = 'member-info'>
-                        <h2>{member.name}</h2>
+                        <h2>{member.name} - <span className='user-status'>{isOnline ? 'Online' : 'Offline'}</span></h2>
                         <p>Joined: {moment(member.created).fromNow()}</p>
                       </div>
                     </div>
