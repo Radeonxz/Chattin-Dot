@@ -27,6 +27,11 @@ export default class realtime {
     const action = _.get(message, 'action', '');
     const payload = _.get(message, 'payload');
     switch(action) {
+      case 'user_online':
+        const isOnline = true;
+        this.onUpdateUserStatus(payload, isOnline);  
+
+        break;
       case 'message_added':
         const activeChannel = store.getActiveChannel();
         let notify = _.get(activeChannel, '_id') !== _.get(payload, 'channelId') && currentUserId !== _.get(payload, 'userId');
@@ -36,11 +41,26 @@ export default class realtime {
       case 'channel_added':
         // check payload object and insert new channel to store
         this.onAddChannel(payload);
-        
+
         break;
       default:
         break;
     }
+  }
+
+  onUpdateUserStatus(userId, isOnline = false) {
+    const store = this.store;
+
+    // user.online = isOnline;
+    // this.users = this.users.set(userId, user);
+    store.users = store.users.update(userId, (user) => {
+      if(user) {
+        user.online = isOnline;
+      }
+      return user;
+    });
+
+    store.update();
   }
 
   onAddMessage(payload, notify = false) {

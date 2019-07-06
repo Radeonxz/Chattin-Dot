@@ -22,6 +22,14 @@ export default class connection {
     return messageObject;
   }
 
+  sendAll(obj) {
+    // send socket messages to all clients
+    this.connections.forEach((con, key) => {
+      const ws = con.ws;
+      this.send(ws, obj);
+    })
+  }
+
   send(ws, obj) {
     const message = JSON.stringify(obj);
     ws.send(message);
@@ -61,7 +69,6 @@ export default class connection {
             })
             // message created successful
 
-
           }).catch(err => {
             // send back to the socket client who sent this meesage with error
             const ws =userConnection.ws;
@@ -72,8 +79,6 @@ export default class connection {
           });
         }
         
-      
-      
         break;
 
       case 'create_channel':
@@ -126,7 +131,6 @@ export default class connection {
         console.log('sss', channel);
         break;
 
-
       case 'auth':
         const userTokenId = payload;
         let connection = this.connections.get(socketId);
@@ -144,6 +148,13 @@ export default class connection {
               payload: 'You are verified',
             }
             this.send(connection.ws, obj);
+
+            // send to all socket clients connetion
+            this.sendAll({
+              action: 'user_online',
+              // payload: token.user.name,
+              payload: _.toString(userId)
+            });
           }).catch((err) => {
             // send back to socket client that you are not logged in
             const obj = {
