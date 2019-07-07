@@ -485,4 +485,12 @@ body {
   color: #fff;
 }
 
+.user-status {
+  font-size: 0.9rem;
+  color: #2c3e50;
+}
+.user-status.online {
+  color: #2ecc71;
+}
+
 /*# sourceMappingURL=app.css.map */

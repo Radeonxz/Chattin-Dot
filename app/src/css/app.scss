@@ -537,6 +537,9 @@ body{
 }
 
 .user-status{
-    font-size: 1.5rem;
+    font-size: 0.9rem;
     color: $body-color;
+    &.online{
+        color: $primary-color;
+    }
 }

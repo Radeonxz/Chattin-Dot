@@ -68,7 +68,6 @@ export default class connection {
               });
             })
             // message created successful
-
           }).catch(err => {
             // send back to the socket client who sent this meesage with error
             const ws =userConnection.ws;
@@ -78,7 +77,6 @@ export default class connection {
             });
           });
         }
-        
         break;
 
       case 'create_channel':
@@ -128,7 +126,7 @@ export default class connection {
           });
           // const memberConnections = this.connections.filter((con) => `${con.userId}` = )
         });
-        console.log('sss', channel);
+        console.log('channel is', channel);
         break;
 
       case 'auth':
@@ -164,9 +162,8 @@ export default class connection {
             this.send(connection.ws, obj);
           });
         }
-
         break;
-      
+
       default:
       break;
     }
@@ -184,7 +181,6 @@ export default class connection {
       }
       // save this connection client into cache
       this.connections = this.connections.set(socketId, clientConnection);
-      
 
       // listen msg from websocket client
       ws.on('message', (msg) => {
@@ -193,8 +189,22 @@ export default class connection {
       });
 
       ws.on('close', () => {
+        const closeConnection = this.connection.get(socketId);
+        const userId = _.toString(_.get(closeConnection, 'userId', null));
+
         // remove this socket client from cache collection
         this.connections = this.connections.remove(socketId);
+        if(userId) {
+          // find all socket clients with userId
+          const userConnections = this.connections.filter((con) => _.toString(_.get(con, 'userId')) === userId);
+          if(userConnections.size === 0) {
+            // no socket clients found are online with this userId, status is offline
+            this.sendAll({
+              action: 'user_offline',
+              payload: userId
+            });
+          }
+        }
       });
     });
   }

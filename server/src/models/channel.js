@@ -6,7 +6,6 @@ import { OrderedMap } from 'immutable';
 export default class Channel{
   constructor(app) {
     this.app = app;
-
     this.channels = new OrderedMap();
   }
 
@@ -29,7 +28,6 @@ export default class Channel{
   load(id) {
     return new Promise((resolve, reject) => {
       id = _.toString(id);
-    
       // find in cache
       const channelFromCache = this.channels.get(id);
 

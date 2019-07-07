@@ -85,7 +85,7 @@ export default class User {
 
   load(id) {
     id = `${id}`;
-    
+
     return new Promise((resolve, reject) => {
 
       // Find in user in cache
@@ -169,7 +169,7 @@ export default class User {
       // return success callback
       const password = _.get(user, 'password');
       const hashPassword = bcrypt.hashSync(password, saltRound);
-      
+
       const userFormatted = {
         name: `${_.trim(_.get(user, 'name'))}`,
         email: email,
@@ -194,7 +194,7 @@ export default class User {
           if(err) {
             reject({message: 'Error when saving the user'});
           }
-          
+
           const userId = _.get(user, '_id').toString();
           this.users = this.users.set(userId, user);
           return resolve(user);
@@ -202,5 +202,4 @@ export default class User {
       });
     });
   }
-  
 }

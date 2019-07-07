@@ -57,7 +57,7 @@ export default class Message {
         this.app.db.collection('messages').aggregate(query, (err, results) => {
           return err ? reject(err) : resolve(results);
         });
-    })
+    });
   }
 
   create(obj) {
@@ -92,7 +92,7 @@ export default class Message {
           _.unset(user, 'password');
           _.unset(user, 'email');
           message.user = user;
-          
+
           return resolve(message);
         }).catch((err) => {
           return reject(err);
