@@ -34,9 +34,22 @@ export default class Message {
               _id: true,
               channelId: true,
               user: {
+                $arrayElemAt: ['$user', 0]
+              },
+              userId: true,
+              body: true,
+              created: true,
+            }
+          },
+          {
+            $project: {
+              _id: true,
+              channelId: true,
+              user: {
                 _id: true,
                 name: true,
                 created: true,
+                oneine: true
               },
               userId: true,
               body: true,

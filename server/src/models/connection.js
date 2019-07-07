@@ -148,11 +148,12 @@ export default class connection {
             this.send(connection.ws, obj);
 
             // send to all socket clients connetion
+            const userIdStr = _.toString(userId)
             this.sendAll({
               action: 'user_online',
-              // payload: token.user.name,
-              payload: _.toString(userId)
+              payload: userIdStr,
             });
+            this.app.models.user.updateUserStatus(userIdStr, true);
           }).catch((err) => {
             // send back to socket client that you are not logged in
             const obj = {
@@ -189,7 +190,7 @@ export default class connection {
       });
 
       ws.on('close', () => {
-        const closeConnection = this.connection.get(socketId);
+        const closeConnection = this.connections.get(socketId);
         const userId = _.toString(_.get(closeConnection, 'userId', null));
 
         // remove this socket client from cache collection
@@ -203,6 +204,9 @@ export default class connection {
               action: 'user_offline',
               payload: userId
             });
+
+            // update user status when go offline
+            this.app.models.user.updateUserStatus(userId, false);
           }
         }
       });
