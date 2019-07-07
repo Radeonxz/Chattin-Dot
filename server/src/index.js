@@ -14,7 +14,7 @@ const app = express();
 app.server = http.createServer(app);
 
 // Setup env
-dotenv.config()
+dotenv.config();
 
 app.use(morgan('dev'));
 
@@ -36,12 +36,10 @@ const mongodbURI = process.env.MONGODB_URI;
 console.log('mongodbURI', mongodbURI);
 new Database().connect(mongodbURI, {
   useNewUrlParser: true
-})
-.then((db) => {
+}).then((db) => {
   console.log('Successfully connected to MongoDB');
   app.db = db;
-})
-.catch((err) => {
+}).catch((err) => {
   throw(err);
 });
 
@@ -90,7 +88,6 @@ app.server.listen(process.env.PORT || PORT, () => {
 });
 
 export default app;
-
 
 // To use the bundled libc++ please add the following LDFLAGS:
 //   LDFLAGS="-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib"

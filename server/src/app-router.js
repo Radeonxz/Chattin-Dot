@@ -20,7 +20,7 @@ export default class AppRouter {
     app.get('/', (req, res, next) => {
       return res.json({
         started: moment(START_TIME).fromNow(),
-      })
+      });
     });
 
     /**
@@ -32,10 +32,9 @@ export default class AppRouter {
       app.models.user.create(body).then((user) => {
         _.unset(user, 'password');
         return res.status(200).json(user);
-      })
-      .catch(err => {
+      }).catch(err => {
         return res.status(400).json(err);
-      })
+      });
     });
 
     /**
@@ -55,7 +54,7 @@ export default class AppRouter {
       }).catch(err => {
         return res.status(401).json({
           error: err
-        })
+        });
       });
    });
 
@@ -73,7 +72,6 @@ export default class AppRouter {
         });
       });
     });
-
 
     /**
     * @endpoint: /api/users/:id
@@ -107,8 +105,8 @@ export default class AppRouter {
       }).catch(err => {
         return res.status(401).json({
           error: err
-        })
-      })
+        });
+      });
     });
 
     /**
@@ -138,10 +136,10 @@ export default class AppRouter {
           return res.status(200).json(channel);
         }).catch((err) => {
           return res.status(404).json({error: {message: 'Not Found.'}});
-        })
+        });
       }).catch((err) => {
         return res.status(404).json({error: {message: 'Not Found.'}});
-      })
+      });
     });
 
     /**
@@ -161,7 +159,7 @@ export default class AppRouter {
 
         // check user is logged in
         // check whether channel has this user, if not return 401
-        
+
         let filter = _.get(req, 'query.filter', null);
         if(filter) {
           filter = JSON.parse(filter);
@@ -255,9 +253,8 @@ export default class AppRouter {
       }).catch(err => {
         return res.status(401).json({
           error: 'Access Denied.'
-        })
+        });
       });
-
-    })
+    });
   }
 }

@@ -30,19 +30,23 @@ export default class realtime {
       case 'user_online':
         const isOnline = true;
         this.onUpdateUserStatus(payload, isOnline);  
-
         break;
+
+      case 'user_offline':
+        this.onUpdateUserStatus(payload, false);
+        break;
+
       case 'message_added':
         const activeChannel = store.getActiveChannel();
         let notify = _.get(activeChannel, '_id') !== _.get(payload, 'channelId') && currentUserId !== _.get(payload, 'userId');
         this.onAddMessage(payload, notify);
-        
         break;
+
       case 'channel_added':
         // check payload object and insert new channel to store
         this.onAddChannel(payload);
-
         break;
+
       default:
         break;
     }

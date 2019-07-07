@@ -12,6 +12,16 @@ export default class User {
     this.users = new OrderedMap();
   }
 
+  updateUserStatus(userId, isOnline = false) {
+    const query = {_id: new ObjectId(userId)};
+    const updater = {$set: {online: isOnline}};
+    return new Promise((resolve, reject) => {
+      this.app.db.collection('users').update(query, updater, (err, info) => {
+        return err ? reject(err) : resolve(info);
+      });
+    });
+  }
+
   find(query = {}, options = {}) {
     return new Promise((resolve, reject) => {
       this.app.db.collection('users').find(query, options).toArray((err, users) => {
@@ -85,7 +95,7 @@ export default class User {
 
   load(id) {
     id = `${id}`;
-    
+
     return new Promise((resolve, reject) => {
 
       // Find in user in cache
@@ -169,7 +179,7 @@ export default class User {
       // return success callback
       const password = _.get(user, 'password');
       const hashPassword = bcrypt.hashSync(password, saltRound);
-      
+
       const userFormatted = {
         name: `${_.trim(_.get(user, 'name'))}`,
         email: email,
@@ -194,7 +204,7 @@ export default class User {
           if(err) {
             reject({message: 'Error when saving the user'});
           }
-          
+
           const userId = _.get(user, '_id').toString();
           this.users = this.users.set(userId, user);
           return resolve(user);
@@ -202,5 +212,4 @@ export default class User {
       });
     });
   }
-  
 }

@@ -5,7 +5,6 @@ import { OrderedMap } from 'immutable';
 export default class Token {
   constructor(app) {
     this.app = app;
-
     this.tokens = new OrderedMap();
   }
 
@@ -13,7 +12,7 @@ export default class Token {
     return new Promise((resolve, reject) => {
       this.load(id).then((token) => {
         const userId = `${token.userId}`;
-        
+
         this.app.models.user.load(userId).then((user) => {
           token.user = user;
           return resolve(token);
@@ -23,7 +22,7 @@ export default class Token {
       }).catch((err) => {
         return reject(err);
       });
-    })
+    });
   }
 
   load(id = null) {
@@ -43,7 +42,7 @@ export default class Token {
         }
         return err ? reject(err) : resolve(token);
       });
-    })
+    });
   }
 
   findTokenById(id, callback = () => {}) {
@@ -69,8 +68,7 @@ export default class Token {
     return new Promise((resolve, reject) => {
       this.app.db.collection('tokens').insertOne(token, (err, info) => {
         return err ? reject(err) : resolve(token);
-      })
-    })
-    
+      });
+    });
   }
 }

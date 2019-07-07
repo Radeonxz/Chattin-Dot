@@ -1,6 +1,5 @@
 import { MongoClient } from 'mongodb';
 
-
 export default class Database {
   connect(URL, options) {
     return new Promise((resolve, reject) => {

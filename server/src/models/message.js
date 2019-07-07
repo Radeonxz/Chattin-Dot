@@ -34,9 +34,22 @@ export default class Message {
               _id: true,
               channelId: true,
               user: {
+                $arrayElemAt: ['$user', 0]
+              },
+              userId: true,
+              body: true,
+              created: true,
+            }
+          },
+          {
+            $project: {
+              _id: true,
+              channelId: true,
+              user: {
                 _id: true,
                 name: true,
                 created: true,
+                oneine: true
               },
               userId: true,
               body: true,
@@ -57,7 +70,7 @@ export default class Message {
         this.app.db.collection('messages').aggregate(query, (err, results) => {
           return err ? reject(err) : resolve(results);
         });
-    })
+    });
   }
 
   create(obj) {
@@ -92,7 +105,7 @@ export default class Message {
           _.unset(user, 'password');
           _.unset(user, 'email');
           message.user = user;
-          
+
           return resolve(message);
         }).catch((err) => {
           return reject(err);

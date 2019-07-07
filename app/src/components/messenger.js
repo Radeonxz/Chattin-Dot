@@ -282,7 +282,7 @@ export default class Messenger extends Component {
                         <img src = {_.get(member, 'avatar')} alt = '' />
                       </div>
                       <div className = 'member-info'>
-                        <h2>{member.name} - <span className='user-status'>{isOnline ? 'Online' : 'Offline'}</span></h2>
+                        <h2>{member.name} - <span className={classNames('user-status', {'online': isOnline})}>{isOnline ? 'Online' : 'Offline'}</span></h2>
                         <p>Joined: {moment(member.created).fromNow()}</p>
                       </div>
                     </div>
