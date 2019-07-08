@@ -233,6 +233,7 @@ export default class AppRouter {
                 _id: true,
                 name: true,
                 created: true,
+                online: true,
               },
               members: true,
             }
