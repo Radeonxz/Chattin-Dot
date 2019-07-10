@@ -280,6 +280,7 @@ export default class Messenger extends Component {
                     <div key = {key} className = 'member'>
                       <div className = 'user-img'>
                         <img src = {_.get(member, 'avatar')} alt = '' />
+                        <span className={classNames('user-status', {'online': isOnline})}/>
                       </div>
                       <div className = 'member-info'>
                         <h2>{member.name} - <span className={classNames('user-status', {'online': isOnline})}>{isOnline ? 'Online' : 'Offline'}</span></h2>

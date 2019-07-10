@@ -302,6 +302,20 @@ body {
   height: 2.5rem;
   border-radius: 50%;
 }
+.members .member .user-img .user-status {
+  display: block;
+  position: absolute;
+  right: 0;
+  bottom: 0.6rem;
+  border: 1px solid #fff;
+  width: 0.7rem;
+  height: 0.7rem;
+  background: #ccc;
+  border-radius: 50%;
+}
+.members .member .user-img .user-status.online {
+  background: #2ecc71;
+}
 .members .member .member-info {
   flex-grow: 1;
   padding: 0.2rem 0 0 0.3rem;

@@ -49,7 +49,6 @@ export default class Message {
                 _id: true,
                 name: true,
                 created: true,
-                oneine: true
               },
               userId: true,
               body: true,

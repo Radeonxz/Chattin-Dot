@@ -27,7 +27,7 @@ export default class connection {
     this.connections.forEach((con, key) => {
       const ws = con.ws;
       this.send(ws, obj);
-    })
+    });
   }
 
   send(ws, obj) {
