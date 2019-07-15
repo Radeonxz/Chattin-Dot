@@ -7,6 +7,17 @@ export default class realtime {
     this.ws = null;
     this.isConnected = false;
     this.connect();
+    this.reconnect();
+  }
+
+  reconnect() {
+    const store = this.store;
+    window.setInterval(() => {
+      const user = store.getCurrentUser();
+      if(user && !this.isConnected) {
+        this.connect();
+      }
+    }, 3000);
   }
 
   decodeMessage(msg) {
@@ -124,7 +135,7 @@ export default class realtime {
 
   send(msg = {}) {
     const isConnected = this.isConnected;
-    if(isConnected) {
+    if(this.ws && isConnected) {
       const msgString = JSON.stringify(msg);
       this.ws.send(msgString);
     }
@@ -163,6 +174,12 @@ export default class realtime {
     ws.onclose = () => {
       console.log('You are disconnected...');
       this.isConnected = false;
+      this.store.update();
+    }
+
+    ws.onerror = () => {
+      this.isConnected = false;
+      this.store.update();
     }
   }
 }
