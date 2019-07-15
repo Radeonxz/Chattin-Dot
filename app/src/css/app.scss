@@ -557,3 +557,9 @@ body{
     color: $primary-color;
   }
 }
+
+.app-warning-state{
+    font-size: 0.9rem;
+    padding:0 0.9rem;
+    color: $danger-color;
+}

@@ -507,4 +507,10 @@ body {
   color: #2ecc71;
 }
 
+.app-warning-state {
+  font-size: 0.9rem;
+  padding: 0 0.9rem;
+  color: #e74c3c;
+}
+
 /*# sourceMappingURL=app.css.map */
