@@ -193,6 +193,16 @@ export default class Store {
     this.update();
   }
 
+  register(user) {
+    return new Promise((resolve, reject) => {
+      this.service.post('api/users', user).then((user) => {
+        return resolve(user);
+      }).catch(err => {
+        return rejecr('An error occured when create user', err);
+      })
+    });
+  }
+
   login(email = null, password = null) {
     const userEmail = _.toLower(email);
     // const _this = this;
