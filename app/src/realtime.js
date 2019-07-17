@@ -174,7 +174,7 @@ export default class realtime {
     ws.onclose = () => {
       console.log('You are disconnected...');
       this.isConnected = false;
-      this.store.update();
+      // this.store.update();
     }
 
     ws.onerror = () => {

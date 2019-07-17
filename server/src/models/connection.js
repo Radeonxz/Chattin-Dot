@@ -22,6 +22,57 @@ export default class connection {
     return messageObject;
   }
 
+  sendToMembers(userId, obj) {
+    const query = [
+      {
+        $match: {
+          members: {$all: [new ObjectId(userId)]}
+        }
+      },
+      {
+        $lookup: {
+          form: 'users',
+          localField: 'members',
+          foreignField: '_id',
+          as: 'users'
+        }
+      },
+      {
+        $unwind: {
+          path: '$users'
+        }
+      },
+      {
+        $match: {'users.online': {$eq: true}}
+      },
+      {
+        $group: {
+          _id: '$users._id'
+        }
+      }
+    ];
+    const users = [];
+    this.app.db.collection('channel').aggregate(query, (err, results) => {
+      if(err === null && results) {
+        _.each(results, (result) => {
+          const uid = _.toString(_.get(result, '_id'));
+          if(uid) {
+            users.push(uid);
+          }
+        });
+
+        // list all connections that is chatting with current user
+        const memberConnections = this.connections.filter((con) => _.includes(users, _.toString(_.get(con, 'userId'))));
+        if(memberConnections.size) {
+          memberConnections.forEach((connection, key) => {
+            const ws = connection.ws;
+            this.send(ws, obj);
+          });
+        }
+      }
+    });
+  }
+
   sendAll(obj) {
     // send socket messages to all clients
     this.connections.forEach((con, key) => {
@@ -149,7 +200,7 @@ export default class connection {
 
             // send to all socket clients connetion
             const userIdStr = _.toString(userId)
-            this.sendAll({
+            this.sendToMembers(userIdStr, {
               action: 'user_online',
               payload: userIdStr,
             });
@@ -200,7 +251,7 @@ export default class connection {
           const userConnections = this.connections.filter((con) => _.toString(_.get(con, 'userId')) === userId);
           if(userConnections.size === 0) {
             // no socket clients found are online with this userId, status is offline
-            this.sendAll({
+            this.sendToMembers(userId, {
               action: 'user_offline',
               payload: userId
             });
