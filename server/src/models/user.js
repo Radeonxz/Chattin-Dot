@@ -13,6 +13,14 @@ export default class User {
   }
 
   updateUserStatus(userId, isOnline = false) {
+    // update user cache
+    this.user = this.users.update(userId, (user) => {
+      if(user) {
+        user.online = isOnline;
+      }
+      return user;
+    });
+
     const query = {_id: new ObjectId(userId)};
     const updater = {$set: {online: isOnline}};
     return new Promise((resolve, reject) => {

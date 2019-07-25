@@ -180,7 +180,17 @@ export default class Store {
   }
 
   signOut() {
-    const userId = `${_.get(this.user, '_id', null)}`;
+    const userId = _.toString(_.get(this.user, '_id', null));
+    const tokenId = _.get(this.token, '_id', null);
+
+    // call server to logout
+    const options = {
+      headers: {
+        authorization: tokenId,
+      }
+    };
+    this.service.get('api/me/logout', options);
+
     this.user = null;
     localStorage.removeItem('me');
     localStorage.removeItem('token');
@@ -195,11 +205,11 @@ export default class Store {
 
   register(user) {
     return new Promise((resolve, reject) => {
-      this.service.post('api/users', user).then((user) => {
-        return resolve(user);
+      this.service.post('api/users', user).then((response) => {
+        return resolve(response.data);
       }).catch(err => {
-        return rejecr('An error occured when create user', err);
-      })
+        return reject('An error occured when create user', err);
+      });
     });
   }
 
