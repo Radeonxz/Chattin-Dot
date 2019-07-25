@@ -189,7 +189,7 @@ export default class AppRouter {
           return res.status(404).json({error: {message: 'Not Found.'}});
         });
       }).catch((err) => {
-        return res.status(401).json({error: {message: 'Access denied'}});
+        return res.status(401).json({error: {message: 'Access Denied.'}});
       });
     });
 
@@ -257,5 +257,27 @@ export default class AppRouter {
         });
       });
     });
+
+    /**
+    * @endpoint: /api/me/logout
+    * @method: GET
+    **/
+    
+    app.get('api/me/logout', (req, res, next) => {
+      let tokenId = req.get('authorization');
+      if(!tokenId) {
+        // get token from query
+        tokenId = _.get(req, 'query.auth');
+      }
+
+      app.models.token.loadTokenAndUser(tokenId).then((token) => {
+        app.models.token.logout(token);
+        return res.status(200).json({
+          message: 'Successfully logged out.'
+        });
+      }).catch(err => {
+        return res.status(401).json({error: {message: 'Access Denied.'}});
+      })
+    })
   }
 }

@@ -61,12 +61,20 @@ export default class UserForm extends Component {
           });
         });
       } else {
-        store.register(user).then((user) => {
+        store.register(user).then((_) => {
           this.setState({
             message: {
-              body: 'User created',
+              body: 'User created.',
               type: 'success'
             }
+          }, () => {
+            // login user after register
+            store.login(user.email, user.password)
+            .then(() => {
+              if(this.props.onClose) {
+                this.props.onClose();
+              }
+            });
           });
         });
       }
