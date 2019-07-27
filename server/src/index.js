@@ -49,39 +49,15 @@ app.models = new Model(app);
 // Import app-router
 app.routers = new AppRouter(app);
 
-/*
-let clients = [];
+// Serve static assets if in production
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  app.use(express.static('app/build'));
 
-app.wss.on('connection', (connection) => {
-  const userId = clients.length + 1;
-
-  connection.userId = userId;
-
-  const newClient = {
-      ws: connection,
-      userId: userId,
-  }
-
-  clients.push(newClient);
-
-  console.log('New client connected with userId: ', userId);
-
-  // //listen event new message from client
-  connection.on('message', (message) => {
-
-      console.log('Got new message from client, the message is: ', message);
-  
-      //send back message to client after client connected to the server
-      connection.send(message + ' yoyoyo');
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'app', 'build', 'index.html'));
   });
-
-  //close connection with clients
-  connection.on('close', () => {
-      console.log('Client with ID:', userId, 'has disconnected');
-      clients = clients.filter((client) => client.userId !== userId);
-  });
-});
-*/
+}
 
 app.server.listen(process.env.PORT || PORT, () => {
   console.log(`App is running on port ${app.server.address().port}`);
