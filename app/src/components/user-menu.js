@@ -27,7 +27,7 @@ export default class UserMenu extends Component {
     const user = store.getCurrentUser();
     return <div className='user-menu' ref={(ref) => this.ref = ref}>
       {user? <div>
-        <h2>My Menu</h2>
+        <h2>Menu</h2>
         <ul className='menu'>
           {/* <li><button type='button'>My Profile</button></li>
           <li><button type='button'>Change Password</button></li> */}

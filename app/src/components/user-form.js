@@ -100,7 +100,7 @@ export default class UserForm extends Component {
       <div className='user-form' ref={(ref) => this.ref = ref}>
         <form onSubmit={this.onSubmit} method='post'>
           {message ? <p className={classNames('app-message', _.get(message, 'type'))}>{_.get(message, 'body')}</p> : null}
-          {isLogin ? <div className='form-item'>
+          {!isLogin ? <div className='form-item'>
             <label>Name</label>
             <input value={_.get(user, 'name', '')} onChange={this.onTextFieldChange} type='text' placeholder='Name' name={'name'} />
           </div> : null}
@@ -113,6 +113,12 @@ export default class UserForm extends Component {
           <div className='form-item'>
             <label>Password</label>
             <input value={_.get(user, 'password')} onChange={this.onTextFieldChange} type='password' placeholder='Password' name='password' />
+          </div>
+
+          <div className='form-info'>
+            <h6>*Sign in with test accounts</h6>
+            <h6>john@123.com/123456789</h6>
+            <h6>jane@123.com/123456789</h6>
           </div>
 
           <div className='form-actions'>
