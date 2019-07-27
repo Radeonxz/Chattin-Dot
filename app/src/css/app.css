@@ -25,7 +25,7 @@ body {
   height: 6rem;
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 .app-messenger .header .left {
   width: 18%;
@@ -56,7 +56,7 @@ body {
   cursor: pointer;
 }
 .app-messenger .header .right {
-  width: 22%;
+  width: 28%;
 }
 .app-messenger .header .right .user-bar {
   display: flex;
@@ -83,7 +83,7 @@ body {
   cursor: pointer;
 }
 .app-messenger .header .content {
-  width: 60%;
+  width: 54%;
 }
 .app-messenger .header .content h2 {
   text-align: center;
@@ -98,11 +98,11 @@ body {
 }
 .app-messenger .main .sidebar-left {
   width: 18%;
-  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
 }
 .app-messenger .main .sidebar-right {
-  width: 22%;
-  border-left: 1px solid rgba(0, 0, 0, 0.05);
+  width: 28%;
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
 }
 .app-messenger .main .sidebar-right .title {
   font-size: 1.1rem;
@@ -111,7 +111,7 @@ body {
 }
 .app-messenger .main .content {
   overflow: hidden;
-  width: 60%;
+  width: 54%;
   display: flex;
   flex-direction: column;
 }
@@ -119,8 +119,8 @@ body {
   flex-grow: 1;
 }
 .app-messenger .main .content .messenger-input {
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  border-left: 1px solid rgba(0, 0, 0, 0.05);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: row;
   height: 4rem;
@@ -187,7 +187,7 @@ body {
 .channels .channel {
   cursor: pointer;
   display: flex;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   padding: 0.5rem;
 }
 .channels .channel .user-img {
@@ -290,7 +290,7 @@ body {
 
 .members .member {
   display: flex;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   padding: 0.5rem 0.3rem;
 }
 .members .member .user-img {
@@ -358,7 +358,7 @@ body {
   min-width: 11rem;
   position: absolute;
   z-index: 1;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   left: 0;
   top: 5.5rem;
   border-top: 0 none;
@@ -371,7 +371,7 @@ body {
   display: flex;
   flex-direction: row;
   padding: 0.4rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   cursor: pointer;
 }
 .toolbar .search-user .user-list .user img {
@@ -409,7 +409,7 @@ body {
   position: absolute;
   top: 6rem;
   right: 0;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-top: 0 none;
   padding: 2rem;
 }
@@ -432,8 +432,8 @@ body {
   min-width: 8rem;
   position: absolute;
   right: 0;
-  top: 6rem;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  top: 4.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-top: none;
 }
 .user-bar .user-menu ul {
@@ -442,7 +442,7 @@ body {
   list-style: none;
 }
 .user-bar .user-menu ul li {
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
   padding: 1rem 2rem;
 }
 .user-bar .user-menu ul li button {
@@ -472,8 +472,17 @@ body {
   font-weight: 600;
 }
 .form-item input[type=email], .form-item input[type=password], .form-item input[type=text] {
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   padding: 0.5rem 1rem;
+}
+
+.form-info {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.form-info h6 {
+  font-weight: normal;
+  color: #2ecc71;
 }
 
 .form-actions button {

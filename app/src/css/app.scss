@@ -480,7 +480,7 @@ body{
         min-width: 8rem;
         position: absolute;
         right: 0;
-        top: $header-height;
+        top: 4.5rem;
         border: 1px solid $border-color;
         border-top: none;
         ul{
@@ -514,15 +514,24 @@ body{
 }
 
 .form-item{
-    display: flex;
-    margin-bottom: 1rem;
-    label{
-        font-weight: 600;
-    }
-    input[type='email'], input[type='password'], input[type='text']{
-        border: 1px solid $border-color;
-        padding: 0.5rem 1rem;
-    }
+  display: flex;
+  margin-bottom: 1rem;
+  label{
+    font-weight: 600;
+  }
+  input[type='email'], input[type='password'], input[type='text']{
+    border: 1px solid $border-color;
+    padding: 0.5rem 1rem;
+  }
+}
+
+.form-info{
+  text-align: center;
+  margin-bottom: 1rem;
+  h6{
+    font-weight: normal;
+    color: $primary-color;
+  }
 }
 
 .form-actions{
