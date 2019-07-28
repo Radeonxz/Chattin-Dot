@@ -154,25 +154,23 @@ export default class realtime {
   }
 
   connect() {
-    console.log('Begin connecting to server...');
-
+    console.log('Connecting to server...');
+    // localhost
     const ws= new WebSocket('ws://localhost:3001');
+    // production
+    // const ws= new WebSocket('wss://chattin-dot.herokuapp.com');
     this.ws = ws;
     ws.onopen = () => {
-      console.log('You are connecting to the server');
       this.isConnected = true;
       this.authtication();
 
       ws.onmessage = (event) => {
         this.readMessage(_.get(event, 'data'));
-
-        console.log('CLIENT server says', event.data);
+        // console.log('CLIENT server says', event.data);
       }
-
     };
 
     ws.onclose = () => {
-      console.log('You are disconnected...');
       this.isConnected = false;
       // this.store.update();
     }

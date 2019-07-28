@@ -7,14 +7,11 @@ import WebSocketServer, {Server} from 'ws';
 import AppRouter from './app-router';
 import Model from './models';
 import Database from './database';
-import dotenv from 'dotenv'
+import path from 'path';
 
 const PORT = 3001;
 const app = express();
 app.server = http.createServer(app);
-
-// Setup env
-dotenv.config();
 
 app.use(morgan('dev'));
 
@@ -33,10 +30,7 @@ app.wss = new Server({
 
 // Connect to MongoDB
 const mongodbURI = process.env.MONGODB_URI;
-console.log('mongodbURI', mongodbURI);
-new Database().connect(mongodbURI, {
-  useNewUrlParser: true
-}).then((db) => {
+new Database().connect(mongodbURI).then((db) => {
   console.log('Successfully connected to MongoDB');
   app.db = db;
 }).catch((err) => {
@@ -50,17 +44,11 @@ app.models = new Model(app);
 app.routers = new AppRouter(app);
 
 // Serve static assets if in production
-if (process.env.NODE_ENV === 'production') {
-  // Set static folder
-  app.use(express.static('app/build'));
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'app', 'build', 'index.html'));
-  });
-}
+const clientPath = path.join(__dirname, 'build');
+app.use('/', express.static(clientPath));
 
 app.server.listen(process.env.PORT || PORT, () => {
-  console.log(`App is running on port ${app.server.address().port}`);
+  console.log(`Server is running on port ${app.server.address().port}`);
 });
 
 export default app;
