@@ -12,17 +12,6 @@ export default class AppRouter {
 
   setupRouter() {
     const app = this.app;
-
-    /**
-    * @endpoint: /
-    * @method: GET
-    **/
-    app.get('/', (req, res, next) => {
-      return res.json({
-        started: moment(START_TIME).fromNow(),
-      });
-    });
-
     /**
     * @endpoint: /api/users
     * @method: POST

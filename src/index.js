@@ -7,14 +7,11 @@ import WebSocketServer, {Server} from 'ws';
 import AppRouter from './app-router';
 import Model from './models';
 import Database from './database';
-import dotenv from 'dotenv'
+import path from 'path';
 
 const PORT = 3001;
 const app = express();
 app.server = http.createServer(app);
-
-// Setup env
-dotenv.config();
 
 app.use(morgan('dev'));
 
@@ -33,10 +30,7 @@ app.wss = new Server({
 
 // Connect to MongoDB
 const mongodbURI = process.env.MONGODB_URI;
-console.log('mongodbURI', mongodbURI);
-new Database().connect(mongodbURI, {
-  useNewUrlParser: true
-}).then((db) => {
+new Database().connect(mongodbURI).then((db) => {
   console.log('Successfully connected to MongoDB');
   app.db = db;
 }).catch((err) => {
@@ -49,42 +43,12 @@ app.models = new Model(app);
 // Import app-router
 app.routers = new AppRouter(app);
 
-/*
-let clients = [];
-
-app.wss.on('connection', (connection) => {
-  const userId = clients.length + 1;
-
-  connection.userId = userId;
-
-  const newClient = {
-      ws: connection,
-      userId: userId,
-  }
-
-  clients.push(newClient);
-
-  console.log('New client connected with userId: ', userId);
-
-  // //listen event new message from client
-  connection.on('message', (message) => {
-
-      console.log('Got new message from client, the message is: ', message);
-  
-      //send back message to client after client connected to the server
-      connection.send(message + ' yoyoyo');
-  });
-
-  //close connection with clients
-  connection.on('close', () => {
-      console.log('Client with ID:', userId, 'has disconnected');
-      clients = clients.filter((client) => client.userId !== userId);
-  });
-});
-*/
+// Serve static assets if in production
+const clientPath = path.join(__dirname, 'build');
+app.use('/', express.static(clientPath));
 
 app.server.listen(process.env.PORT || PORT, () => {
-  console.log(`App is running on port ${app.server.address().port}`);
+  console.log(`Server is running on port ${app.server.address().port}`);
 });
 
 export default app;
