@@ -5,325 +5,326 @@
 @import 'https://fonts.googleapis.com/css?family=Poppins:400,600';
 
 body, html{
-    margin: 0;
-    padding: 0;
-    height: 100%;
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 body{
-    color: $body-color;
-    font-size: 1.3rem;
-    font-family: 'Poppins', sans-serif;
+  color: $body-color;
+  background: $gradient-color;
+  font-size: 1.3rem;
+  font-family: 'Poppins', sans-serif;
 }
 
 *{
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 .app-messenger{
+  display: flex;
+  flex-direction: column;
+  .header{
+    height: $header-height;
+    //background: red;
     display: flex;
-    flex-direction: column;
-    .header{
-        height: $header-height;
-        //background: red;
+    flex-direction: row;
+    border-bottom: 1px solid $border-color;
+    .left{
+      width: $left-sidebar-width;
+      position: relative;
+      .left-action{
+        position: absolute;
+        left: 0.9rem;
+        top: 0;
+      }
+      .right-action{
+        position: absolute;
+        right: 0.9rem;
+        top: 0;
+      }
+      h2{
+        line-height: $header-line-height;
+        font-size: 1.0rem;
+        font-weight: 600;
+        display: block;
+        text-align: center;
+      }
+      button{
+        background: none;
+        line-height: $header-line-height;
+        border: 0 none;
+        font-size: 1.0rem;
+        cursor: pointer;
+      }
+      // .actions{
+      //   line-height: $header-line-height;
+      //   padding: 0 20px;
+      // }
+    }
+    .right{
+      width: $right-sidebar-width;
+      .user-bar{
+        display: flex;
+        justify-content: flex-end;
+        padding: 0 10px;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        .profile-name{                    
+          p{
+            margin: 0 0.5rem;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+        .profile-image{
+          img{
+            margin: 0 0.5rem;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+          }
+        }
+      }
+    }
+    .content{
+      width: $content-width;
+      h2{
+        text-align: center;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+  .main{
+    height: 100%;
+    display: flex;
+    overflow: hidden;
+    //background: green;
+    .sidebar-left{
+      //background: blue;
+      width: $left-sidebar-width;
+      border-right: 1px solid $border-color;
+    }
+    .sidebar-right{
+      //background: black;
+      width: $right-sidebar-width;
+      border-left: 1px solid $border-color;
+      .title{
+        font-size: 1.1rem;
+        font-weight: 600;
+        padding: 0.5rem;
+      }
+    }
+    .content{
+      overflow: hidden;
+      width: $content-width;
+      display: flex;
+      flex-direction: column;
+      .messages{
+        flex-grow: 1;
+      }
+      .messenger-input{
+        border-top: 1px solid $border-color;
+        border-left: 1px solid $border-color;
         display: flex;
         flex-direction: row;
-        border-bottom: 1px solid $border-color;
-        .left{
-            width: $left-sidebar-width;
-            position: relative;
-            .left-action{
-                position: absolute;
-                left: 0.9rem;
-                top: 0;
-            }
-            .right-action{
-                position: absolute;
-                right: 0.9rem;
-                top: 0;
-            }
-            h2{
-                line-height: $header-line-height;
-                font-size: 1.0rem;
-                font-weight: 600;
-                display: block;
-                text-align: center;
-            }
-            button{
-                background: none;
-                line-height: $header-line-height;
-                border: 0 none;
-                font-size: 1.0rem;
-                cursor: pointer;
-            }
-            // .actions{
-            //     line-height: $header-line-height;
-            //     padding: 0 20px;
-            // }
+        height: 4rem;
+        .text-input{
+          flex-grow: 1;
+          textarea{
+            border: 0 none;
+            width: 100%;
+            height: 100%;
+            padding: 0.7rem 1rem;
+          }
         }
-        .right{
-            width: $right-sidebar-width;
-            .user-bar{
-                display: flex;
-                justify-content: flex-end;
-                padding: 0 10px;
-                position: relative;
-                top: 50%;
-                transform: translateY(-50%);
-                .profile-name{                    
-                    p{
-                        margin: 0 0.5rem;
-                        position: relative;
-                        top: 50%;
-                        transform: translateY(-50%);
-                    }
-                }
-                .profile-image{
-                    img{
-                        margin: 0 0.5rem;
-                        width: 3rem;
-                        height: 3rem;
-                        border-radius: 50%;
-                        position: relative;
-                        top: 50%;
-                        transform: translateY(-50%);
-                        cursor: pointer;
-                    }
-                }
-            }
+        .actions{
+          button.send{
+            background: $primary-color;
+            color: #fff;
+            border: 0 none;
+            padding: 0.5rem 3rem;
+            line-height: 3rem;
+          }
         }
-        .content{
-            width: $content-width;
-            h2{
-                text-align: center;
-                position: relative;
-                top: 50%;
-                transform: translateY(-50%);
-            }
-        }
+      }
     }
-    .main{
-        height: 100%;
-        display: flex;
-        overflow: hidden;
-        //background: green;
-        .sidebar-left{
-            //background: blue;
-            width: $left-sidebar-width;
-            border-right: 1px solid $border-color;
-        }
-        .sidebar-right{
-            //background: black;
-            width: $right-sidebar-width;
-            border-left: 1px solid $border-color;
-            .title{
-                font-size: 1.1rem;
-                font-weight: 600;
-                padding: 0.5rem;
-            }
-        }
-        .content{
-            overflow: hidden;
-            width: $content-width;
-            display: flex;
-            flex-direction: column;
-            .messages{
-                flex-grow: 1;
-            }
-            .messenger-input{
-                border-top: 1px solid $border-color;
-                border-left: 1px solid $border-color;
-                display: flex;
-                flex-direction: row;
-                height: 4rem;
-                .text-input{
-                    flex-grow: 1;
-                    textarea{
-                        border: 0 none;
-                        width: 100%;
-                        height: 100%;
-                        padding: 0.7rem 1rem;
-                    }
-                }
-                .actions{
-                    button.send{
-                        background: $primary-color;
-                        color: #fff;
-                        border: 0 none;
-                        padding: 0.5rem 3rem;
-                        line-height: 3rem;
-                    }
-                }
-            }
-        }
-    }
+  }
 }
 
 .messages{
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  height: 100%; 
+  .message{
     display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    height: 100%; 
-    .message{
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        margin: 2.7rem 0.3rem;
-        .msg-user-img{
-            img{
-                width: 2rem;
-                height: 2rem;
-                border-radius: 50%;
-            }
-        }
-        .msg-body{
-            padding-left: 0.5rem;
-            .msg-author{
-                font-size: 0.9rem;
-                line-height: 2rem;
-            }
-            .msg-text{
-                background: rgba(0, 0, 0, 0.15);
-                font-size: 0.9rem;
-                padding: 0.7rem;
-                border-radius: 0.7rem;
-            }
-        }
-        &.me{
-            justify-content: flex-end;
-            .msg-body{
-                .msg-text{
-                    background-color: $primary-color;
-                    color: #fff;
-                }
-            }
-        }
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 2.7rem 0.3rem;
+    .msg-user-img{
+      img{
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+      }
     }
+    .msg-body{
+      padding-left: 0.5rem;
+      .msg-author{
+        font-size: 0.9rem;
+        line-height: 2rem;
+      }
+      .msg-text{
+        background: rgba(0, 0, 0, 0.15);
+        font-size: 0.9rem;
+        padding: 0.7rem;
+        border-radius: 0.7rem;
+      }
+    }
+    &.me{
+      justify-content: flex-end;
+      .msg-body{
+        .msg-text{
+          background-color: $primary-color;
+          color: #fff;
+        }
+      }
+    }
+  }
 }
 
 .channels{
-    overflow-y: auto;
-    height: 100%;
-    .channel{
-        cursor: pointer;
-        display: flex;
-        border-bottom: 1px solid $border-color;
-        padding: 0.5rem;
-        .user-img{
-            width: 2.5rem;
-            img{
-                // width: 2.5rem;
-                // height: 2.5rem;
-                // border-radius: 50%;
-                max-width: 100%;
-            }
-            .channel-avatars{
-                overflow: hidden;
-                width: 2.5rem;
-                height: 2.5rem;
-                border-radius: 50%;
-                background-color: #ccc;
-                position: relative;
-                &.channel-avatars-1{
-                    img{
-                        width: 100%;
-                        height: 100%;
-                        border-radius: 50%;
-                    }
-                }
-                &.channel-avatars-2{
-                    img{
-                        width: 50%;
-                        height: 100%;
-                        position: absolute;
-                        right: 0;
-                        top: 0;
-                        &:first-child{
-                            left: 0;
-                            top: 0;
-                        }
-                    }
-                }
-                &.channel-avatars-3{
-                    img{
-                        width: 50%;
-                        height: 50%;
-                        position: absolute;
-                        right: 0;
-                        top: 0;
-                        &:first-child{
-                            left: 0;
-                            top: 0;
-                            width: 50%;
-                            height: 100%;
-                        }
-                        &:last-child{
-                            bottom: 0;
-                            right: 0;
-                            top: 1.25rem;
-                            width: 50%;
-                            height: 50%;
-                        }
-                    }
-                }
-                &.channel-avatars-4{
-                    img{
-                        width: 50%;
-                        height: 50%;
-                        position: absolute;
-                        right: 0;
-                        top: 0;
-                        &:first-child{
-                            left: 0;
-                            top: 0;
-                            width: 50%;
-                            height: 100%;
-                        }
-                        &:nth-child(3n) {
-                            bottom: 0;
-                            right: 0;
-                            top: 1.25rem;
-                            width: 50%;
-                            height: 50%;
-                        }
-                        &:last-child{
-                            left: 0;
-                            bottom: 0;
-                            top: 1.25rem;
-                        }
-                    }
-                }
-            }
+  overflow-y: auto;
+  height: 100%;
+  .channel{
+    cursor: pointer;
+    display: flex;
+    border-bottom: 1px solid $border-color;
+    padding: 0.5rem;
+    .user-img{
+      width: 2.5rem;
+      img{
+        // width: 2.5rem;
+        // height: 2.5rem;
+        // border-radius: 50%;
+        max-width: 100%;
+      }
+      .channel-avatars{
+        overflow: hidden;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        background-color: #ccc;
+        position: relative;
+        &.channel-avatars-1{
+          img{
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+          }
         }
-        .channel-info{
-            flex-grow: 1;
-            padding: 0.2rem 0 0 0.3rem;
-            overflow: hidden;
-            h2{
-                font-size: 0.9rem;
-                font-weight: 600;
-                white-space: nowrap;
-                overflow: hidden;
+        &.channel-avatars-2{
+          img{
+            width: 50%;
+            height: 100%;
+            position: absolute;
+            right: 0;
+            top: 0;
+            &:first-child{
+              left: 0;
+              top: 0;
             }
-            p{
-                font-size: 0.7rem;
-                white-space: nowrap;
-                overflow: hidden;
+          }
+        }
+        &.channel-avatars-3{
+          img{
+            width: 50%;
+            height: 50%;
+            position: absolute;
+            right: 0;
+            top: 0;
+            &:first-child{
+              left: 0;
+              top: 0;
+              width: 50%;
+              height: 100%;
             }
-        }
-        &.active{
-            background: rgba(0, 0, 0, 0.05);
-        }
-        &.notify{
-            .channel-info{
-                p{
-                    color: $primary-color;
-                }
+            &:last-child{
+              bottom: 0;
+              right: 0;
+              top: 1.25rem;
+              width: 50%;
+              height: 50%;
             }
+          }
         }
+        &.channel-avatars-4{
+          img{
+            width: 50%;
+            height: 50%;
+            position: absolute;
+            right: 0;
+            top: 0;
+            &:first-child{
+              left: 0;
+              top: 0;
+              width: 50%;
+              height: 100%;
+            }
+            &:nth-child(3n) {
+              bottom: 0;
+              right: 0;
+              top: 1.25rem;
+              width: 50%;
+              height: 50%;
+            }
+            &:last-child{
+              left: 0;
+              bottom: 0;
+              top: 1.25rem;
+            }
+          }
+        }
+      }
     }
+    .channel-info{
+      flex-grow: 1;
+      padding: 0.2rem 0 0 0.3rem;
+      overflow: hidden;
+      h2{
+        font-size: 0.9rem;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      p{
+        font-size: 0.7rem;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+    }
+    &.active{
+      background: rgba(0, 0, 0, 0.05);
+    }
+    &.notify{
+      .channel-info{
+        p{
+          color: $primary-color;
+        }
+      }
+    }
+  }
 }
 
 .members{
@@ -373,144 +374,179 @@ body{
 //}
 
 .toolbar{
-    height: $header-line-height;
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    span{
-        line-height: 1rem;
-        height: 1.8rem;
-        background: $primary-color;
-        color: #fff;
+  height: $header-line-height;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  span{
+    line-height: 1rem;
+    height: 1.8rem;
+    background: $primary-color;
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    margin: 1.3rem 0.3rem 0 0.2rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.3rem;
+  }
+  label{
+    font-size: 1rem;
+    line-height: $header-line-height;
+  }
+  input{
+    height: 2rem;
+    line-height: 2rem;
+    background: #fff;
+    padding: 0 0 0 0.6rem;
+    margin: 1.2rem 0 0 0.5rem;
+    border: 0 none;
+    border-radius: 3px;
+  }
+  .search-user{
+    min-width: 11rem;
+    position: absolute;
+    z-index: 1;
+    border: 1px solid $border-color;
+    left: 0;
+    top: 5.5rem;
+    border-top: 0 none;
+    
+    .user-list{
+      display: flex;
+      flex-direction: column;
+      .user{
+        display: flex;
+        flex-direction: row;
+        padding: 0.4rem;
+        border-bottom: 1px solid $border-color;
         cursor: pointer;
-        display: block;
-        margin: 1.3rem 0.3rem 0 0.2rem;
-        padding: 0.4rem 0.6rem;
-        border-radius: 0.3rem;
-    }
-    label{
-        font-size: 1rem;
-        line-height: $header-line-height;
-    }
-    input{
-        height: 2rem;
-        line-height: 2rem;
-        margin: 1.2rem 0 0 0.5rem;
-        border: 0 none;
-    }
-    .search-user{
-        min-width: 11rem;
-        position: absolute;
-        z-index: 1;
-        border: 1px solid $border-color;
-        left: 0;
-        top: 5.5rem;
-        border-top: 0 none;
-        
-        .user-list{
-            display: flex;
-            flex-direction: column;
-            .user{
-                display: flex;
-                flex-direction: row;
-                padding: 0.4rem;
-                border-bottom: 1px solid $border-color;
-                cursor: pointer;
-                img{
-                    width: 2rem;
-                    height: 2rem;
-                    border-radius: 50%;
-                    //margin-top: 0.5rem;
-                }
-                h2{
-                    font-size: 0.9rem;
-                    padding: 0.3rem 0 0 0.2rem;
-                    flex-grow: 1;
-                    transform: translateY(0);
-                }
-                &:last-child{
-                    border-bottom: none;
-                }
-                &:hover{
-                    background: rgba(0, 0, 0, 0.02);
-                }
-            }
+        img{
+          width: 2rem;
+          height: 2rem;
+          border-radius: 50%;
+          //margin-top: 0.5rem;
         }
+        h2{
+          font-size: 0.9rem;
+          padding: 0.3rem 0 0 0.2rem;
+          flex-grow: 1;
+          transform: translateY(0);
+        }
+        &:last-child{
+          border-bottom: none;
+        }
+        &:hover{
+          background: rgba(0, 0, 0, 0.02);
+        }
+      }
     }
+  }
 }
 
 .user-bar{
-    position: relative;
-    button.login-btn{
-        height: $header-height;
-        padding: 1rem 0;
-        border: 0 none;
-        background: none;
-        color: $primary-color;
-        font-weight: 600;
-        font-size: 1.3rem;
-        cursor: pointer;
-    }
-    .user-form{
-        position: absolute;
-        top: $header-height;
-        right: 0;
-        border: 1px solid $border-color;
-        border-top: 0 none;
-        padding: 2rem;
-        .form-item{
-            label{
-                height: 2rem;
-                min-width: 8rem;
-                text-align: right;
-                margin-right: 1rem;
-            }
-            input[type='email'], input[type='password'], input[type='text']{
-                height: 2rem;
-                line-height: 2rem;
-            }
-        }
-        .form-actions{
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
-        }
-    }
-    .user-menu{
+  position: relative;
+  button.login-btn{
+    height: $header-height;
+    padding: 1rem 0;
+    border: 0 none;
+    background: none;
+    // color: $primary-color;
+    color: #000;
+    font-weight: 600;
+    font-size: 1.3rem;
+    cursor: pointer;
+  }
+  // previous layout
+  // .user-form{
+  //   position: absolute;
+  //   top: $header-height;
+  //   right: 0;
+  //   border: 1px solid $border-color;
+  //   border-top: 0 none;
+  //   padding: 2rem;
+  //   .form-item{
+  //     label{
+  //       height: 2rem;
+  //       min-width: 8rem;
+  //       text-align: right;
+  //       margin-right: 1rem;
+  //     }
+  //     input[type='email'], input[type='password'], input[type='text']{
+  //       height: 2rem;
+  //       line-height: 2rem;
+  //     }
+  //   }
+  //   .form-actions{
+  //     display: flex;
+  //     flex-direction: row;
+  //     justify-content: flex-end;
+  //   }
+  // }
+  .user-form{
+    position: absolute;
+    top: $header-height;
+    background: #fff;
+    right: 0;
+    border: 1px solid $border-color;
+    border-top: 0 none;
+    padding: 2rem;
+    .form-item{
+      label{
+        height: 2rem;
         min-width: 8rem;
-        position: absolute;
-        right: 0;
-        top: 4.5rem;
-        border: 1px solid $border-color;
-        border-top: none;
-        ul{
-            padding: 0;
-            margin: 0;
-            list-style: none;
-            li{
-                border-top: 1px solid $border-color;
-                padding: 1rem 2rem;
-                button{
-                    background: none;
-                    border: 0 none;
-                    display: block;
-                    width: 100%;
-                    text-align: center;
-                    cursor: pointer;
-                }
-                &:hover{
-                    background: rgba(0, 0, 0, 0.09);
-                }
-            }
-        }
-        h2{
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin: 0;
-            display: block;
-            text-align: center;
-        }
+        text-align: right;
+        margin-right: 1rem;
+      }
+      input[type='email'], input[type='password'], input[type='text']{
+        height: 2rem;
+        line-height: 2rem;
+        border-bottom: 1px solid #000;
+      }
+      &:active{
+        border-bottom: none;
+      }
     }
+    .form-actions{
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+    }
+  }
+  .user-menu {
+    min-width: 8rem;
+    position: absolute;
+    right: 0;
+    top: 4.5rem;
+    // border: 1px solid $border-color;
+    border-top: none;
+    ul{
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      li{
+        border-top: 1px solid $border-color;
+        padding: 1rem 2rem;
+        button{
+          background: none;
+          border: 0 none;
+          display: block;
+          width: 100%;
+          text-align: center;
+          cursor: pointer;
+        }
+        &:hover{
+          background: rgba(0, 0, 0, 0.09);
+        }
+      }
+    }
+    h2{
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+      display: block;
+      text-align: center;
+    }
+  }
 }
 
 .form-item{
@@ -530,20 +566,19 @@ body{
   margin-bottom: 1rem;
   h6{
     font-weight: normal;
-    color: $primary-color;
   }
 }
 
 .form-actions{
-    button{
-        border: 0 none;
-        padding: 0.7rem 2.5rem;
-        text-align: center;
-        &.primary{
-            background: $primary-color;
-            color: #fff;
-        }
+  button{
+    border: 0 none;
+    padding: 0.7rem 2.5rem;
+    text-align: center;
+    &.primary{
+      background: $primary-color;
+      color: #fff;
     }
+  }
 }
 
 .app-message{
@@ -568,7 +603,7 @@ body{
 }
 
 .app-warning-state{
-    font-size: 0.9rem;
-    padding: 2.3rem 0.9rem;
-    color: $danger-color;
+  font-size: 0.9rem;
+  padding: 2.3rem 0.9rem;
+  color: $danger-color;
 }
