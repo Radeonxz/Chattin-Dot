@@ -39,6 +39,7 @@ export default class AppRouter {
       }
 
       app.models.token.loadTokenAndUser(tokenId).then((token) => {
+        _.unset(token, 'user.password');
         return res.json(token);
       }).catch(err => {
         return res.status(401).json({

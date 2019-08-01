@@ -3,12 +3,6 @@ import _ from 'lodash'
 import Service from './service'
 import Realtime from './realtime'
 
-// const users = OrderedMap({
-//   '1': {_id: '1', email: 'xuan@123.com', name: 'Xuan Zhao VeryLong', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@alex.png'},
-//   '2': {_id: '2', email: 'zhao@123.com', name: 'Zhao111111111111111111111', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@bob.png'},
-//   '3': {_id: '3', email: 'bob@123.com', name: 'Bob2222222222222222222222', created: new Date(), avatar: 'https://api.adorable.io/avatars/100/abott@john.png'},
-// });
-
 export default class Store {
   constructor(appComponent) {
     this.app = appComponent;
@@ -305,9 +299,6 @@ export default class Store {
       }).catch((err) => {
         console.log('Error!', err);
       });
-    }
-    if(channelId) {
-      
     }
   }
 
