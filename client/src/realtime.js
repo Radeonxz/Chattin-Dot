@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { OrderedMap } from 'immutable';
+import { webSocketURL } from './config';
 
 export default class realtime {
   constructor(store) {
@@ -155,10 +156,7 @@ export default class realtime {
 
   connect() {
     console.log('Connecting to server...');
-    // localhost
-    const ws= new WebSocket('ws://localhost:3001');
-    // production
-    // const ws= new WebSocket('wss://chattin-dot.herokuapp.com');
+    const ws= new WebSocket(webSocketURL);
     this.ws = ws;
     ws.onopen = () => {
       this.isConnected = true;
