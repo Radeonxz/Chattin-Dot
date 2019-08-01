@@ -5,7 +5,10 @@ $left-sidebar-width: 18%;
 $right-sidebar-width: 22%;
 $content-width: 60%;
 
-$border-color: rgba(0, 0, 0, 0.08);
+// $border-color: rgba(0, 0, 0, 0.08);
+$border-color: rgba(255, 255, 255, 0.7);
+
+$gradient-color: linear-gradient(135deg, rgba(160,255,139,1) 0%, rgba(63,146,255,1) 100%);
 
 $primary-color: #2ecc71;
 $danger-color: #e74c3c;

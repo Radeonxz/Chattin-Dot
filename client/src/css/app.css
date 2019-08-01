@@ -7,6 +7,7 @@ body, html {
 
 body {
   color: #2c3e50;
+  background: linear-gradient(135deg, #a0ff8b 0%, #3f92ff 100%);
   font-size: 1.3rem;
   font-family: "Poppins", sans-serif;
 }
@@ -25,7 +26,7 @@ body {
   height: 6rem;
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
 }
 .app-messenger .header .left {
   width: 18%;
@@ -98,11 +99,11 @@ body {
 }
 .app-messenger .main .sidebar-left {
   width: 18%;
-  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  border-right: 1px solid rgba(255, 255, 255, 0.7);
 }
 .app-messenger .main .sidebar-right {
   width: 22%;
-  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  border-left: 1px solid rgba(255, 255, 255, 0.7);
 }
 .app-messenger .main .sidebar-right .title {
   font-size: 1.1rem;
@@ -119,8 +120,8 @@ body {
   flex-grow: 1;
 }
 .app-messenger .main .content .messenger-input {
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
+  border-left: 1px solid rgba(255, 255, 255, 0.7);
   display: flex;
   flex-direction: row;
   height: 4rem;
@@ -187,7 +188,7 @@ body {
 .channels .channel {
   cursor: pointer;
   display: flex;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
   padding: 0.5rem;
 }
 .channels .channel .user-img {
@@ -290,7 +291,7 @@ body {
 
 .members .member {
   display: flex;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
   padding: 0.5rem 0.3rem;
 }
 .members .member .user-img {
@@ -351,14 +352,17 @@ body {
 .toolbar input {
   height: 2rem;
   line-height: 2rem;
+  background: #fff;
+  padding: 0 0 0 0.6rem;
   margin: 1.2rem 0 0 0.5rem;
   border: 0 none;
+  border-radius: 3px;
 }
 .toolbar .search-user {
   min-width: 11rem;
   position: absolute;
   z-index: 1;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.7);
   left: 0;
   top: 5.5rem;
   border-top: 0 none;
@@ -371,7 +375,7 @@ body {
   display: flex;
   flex-direction: row;
   padding: 0.4rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
   cursor: pointer;
 }
 .toolbar .search-user .user-list .user img {
@@ -400,7 +404,7 @@ body {
   padding: 1rem 0;
   border: 0 none;
   background: none;
-  color: #2ecc71;
+  color: #000;
   font-weight: 600;
   font-size: 1.3rem;
   cursor: pointer;
@@ -408,8 +412,9 @@ body {
 .user-bar .user-form {
   position: absolute;
   top: 6rem;
+  background: #fff;
   right: 0;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.7);
   border-top: 0 none;
   padding: 2rem;
 }
@@ -422,6 +427,10 @@ body {
 .user-bar .user-form .form-item input[type=email], .user-bar .user-form .form-item input[type=password], .user-bar .user-form .form-item input[type=text] {
   height: 2rem;
   line-height: 2rem;
+  border-bottom: 1px solid #000;
+}
+.user-bar .user-form .form-item:active {
+  border-bottom: none;
 }
 .user-bar .user-form .form-actions {
   display: flex;
@@ -433,7 +442,6 @@ body {
   position: absolute;
   right: 0;
   top: 4.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.08);
   border-top: none;
 }
 .user-bar .user-menu ul {
@@ -442,7 +450,7 @@ body {
   list-style: none;
 }
 .user-bar .user-menu ul li {
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
   padding: 1rem 2rem;
 }
 .user-bar .user-menu ul li button {
@@ -472,7 +480,7 @@ body {
   font-weight: 600;
 }
 .form-item input[type=email], .form-item input[type=password], .form-item input[type=text] {
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.7);
   padding: 0.5rem 1rem;
 }
 
@@ -482,7 +490,6 @@ body {
 }
 .form-info h6 {
   font-weight: normal;
-  color: #2ecc71;
 }
 
 .form-actions button {
