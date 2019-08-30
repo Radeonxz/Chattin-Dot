@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import _ from 'lodash'
-import classNames from 'classnames'
+import React, { Component } from 'react';
+import _ from 'lodash';
+import classNames from 'classnames';
 
 export default class UserForm extends Component {
   constructor(props) {
@@ -15,18 +15,18 @@ export default class UserForm extends Component {
       }
     }
 
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onTextFieldChange = this.onTextFieldChange.bind(this);
-    this.onClickOutside = this.onClickOutside.bind(this);
+    // this.onSubmit = this.onSubmit.bind(this);
+    // this.onTextFieldChange = this.onTextFieldChange.bind(this);
+    // this.onClickOutside = this.onClickOutside.bind(this);
   }
 
-  onClickOutside(event) {
+  onClickOutside = event => {
     if(this.ref && !this.ref.contains(event.target)) {
       if(this.props.onClose) {
         this.props.onClose();
       }
     }
-  }
+  };
 
   componentDidMount() {
     window.addEventListener('mousedown', this.onClickOutside);
@@ -36,21 +36,20 @@ export default class UserForm extends Component {
     window.removeEventListener('mousedown', this.onClickOutside);
   }
 
-  onSubmit(event) {
+  onSubmit = event => {
     const {user, isLogin} = this.state;
     const { store } = this.props;
     event.preventDefault();
 
-    this.setState({message: null}, () => {
+    this.setState({
+      message: null
+    }, () => {
       if(isLogin) {
         store.login(user.email, user.password)
         .then((user) => {
           if(this.props.onClose) {
             this.props.onClose();
           }
-          // this.setState({
-          //   message: null,
-          // });
         })
         .catch((err) => {
           this.setState({
@@ -79,27 +78,25 @@ export default class UserForm extends Component {
         });
       }
     });
-    
-    if(user.email && user.password) {
-      
-    }
-  }
+  };
 
-  onTextFieldChange(event) {
+  onTextFieldChange = event => {
     let { user } = this.state;
     const field = event.target.name;
     user[field] = event.target.value;
     this.setState({
       user: user
     });
-  }
+  };
 
   render() {
     const {user, message, isLogin} = this.state;
     return (
       <div className='user-form' ref={(ref) => this.ref = ref}>
         <form onSubmit={this.onSubmit} method='post'>
-          {message ? <p className={classNames('app-message', _.get(message, 'type'))}>{_.get(message, 'body')}</p> : null}
+          {message ? <p className={classNames('app-message', _.get(message, 'type'))}>
+            {_.get(message, 'body')}
+          </p> : null}
           {!isLogin ? <div className='form-item'>
             <label>Name</label>
             <input value={_.get(user, 'name', '')} onChange={this.onTextFieldChange} type='text' placeholder='Name' name={'name'} />
@@ -107,12 +104,24 @@ export default class UserForm extends Component {
 
           <div className='form-item'>
             <label>Email</label>
-            <input value={_.get(user, 'email')} onChange={this.onTextFieldChange} type='email' placeholder='Email address' name='email' />
+            <input
+              value={_.get(user, 'email')}
+              onChange={this.onTextFieldChange}
+              type='email'
+              placeholder='Email address'
+              name='email'
+            />
           </div>
 
           <div className='form-item'>
             <label>Password</label>
-            <input value={_.get(user, 'password')} onChange={this.onTextFieldChange} type='password' placeholder='Password' name='password' />
+            <input
+              value={_.get(user, 'password')}
+              onChange={this.onTextFieldChange}
+              type='password'
+              placeholder='Password'
+              name='password'
+            />
           </div>
 
           <div className='form-info'>
@@ -126,9 +135,13 @@ export default class UserForm extends Component {
               this.setState({
                 isLogin: false,
               });
-            }} type='button'>Create new accouont?</button> : null}
+            }} type='button'>
+              Create new accouont?
+            </button> : null}
 
-            <button className='primary' type='submit'>{isLogin ? 'Sign In' : 'Create new account'}</button>
+            <button className='primary' type='submit'>
+              {isLogin ? 'Sign In' : 'Create new account'}
+            </button>
           </div>
         </form>
       </div>
