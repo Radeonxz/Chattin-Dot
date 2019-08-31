@@ -4,14 +4,14 @@ import _ from 'lodash'
 export default class SearchUser extends Component{
   constructor(props) {
     super(props);
-    this.handleOnclick = this.handleOnclick.bind(this);
+    // this.handleOnclick = this.handleOnclick.bind(this);
   }
 
-  handleOnclick(user) {
+  handleOnclick = user => {
     if(this.props.onSelect) {
       this.props.onSelect(user);
     }
-  }
+  };
 
   render(){
     const {store} = this.props;
