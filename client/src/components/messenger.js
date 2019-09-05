@@ -1,9 +1,9 @@
-import React, {Component} from 'react'
-import classNames from 'classnames'
-import {OrderedMap} from 'immutable'
-import _ from 'lodash'
-import moment from 'moment'
-import {ObjectID} from '../helpers/objectid'
+import React, {Component} from 'react';
+import classNames from 'classnames';
+import {OrderedMap} from 'immutable';
+import _ from 'lodash';
+import moment from 'moment';
+import {ObjectID} from '../helpers/objectid';
 
 // import avatar from '../images/avatar.jpg'
 
@@ -27,12 +27,12 @@ export default class Messenger extends Component {
     this.handleSend = this.handleSend.bind(this);
     this.renderMessage = this.renderMessage.bind(this);
     this.scrollMessagesToBottom = this.scrollMessagesToBottom.bind(this);
-    this._onCreateChannel = this._onCreateChannel.bind(this);
-    this.renderChannelAvatars = this.renderChannelAvatars.bind(this);
-    this.renderChannelTitle = this.renderChannelTitle.bind(this);
+    // this._onCreateChannel = this._onCreateChannel.bind(this);
+    // this.renderChannelAvatars = this.renderChannelAvatars.bind(this);
+    // this.renderChannelTitle = this.renderChannelTitle.bind(this);
   }
 
-  renderChannelAvatars(channel) {
+  renderChannelAvatars = channel => {
     const {store} = this.props;
     const members = store.getMembersFromChannel(channel);
     const maxDisplay = 4;
@@ -41,9 +41,9 @@ export default class Messenger extends Component {
       return index < maxDisplay ? <img key = {index} src = {_.get(user, 'avatar')} alt = {_.get(user, 'name')} /> : null;
     });
     return <div className = {classNames('channel-avatars', `channel-avatars-${total}`)}>{avatars}</div>
-  }
+  };
 
-  renderChannelTitle(channel = null) {
+  renderChannelTitle = (channel = null) => {
     if(!channel) {
       return null;
     }
@@ -61,11 +61,10 @@ export default class Messenger extends Component {
     if(!title && _.get(channel, 'isNew')) {
       title = 'New channel';
     }
-
     return <h2>{title}</h2>
-  }
+  };
 
-  _onCreateChannel() {
+  _onCreateChannel = () => {
     const {store} = this.props;
     const currentUser = store.getCurrentUser();
     const currentUserId = _.get(currentUser, '_id');
@@ -84,7 +83,7 @@ export default class Messenger extends Component {
 
     channel.members = channel.members.set(currentUserId, true);
     store.onCreateNewChannel(channel);
-  }
+  };
 
   scrollMessagesToBottom(){
     if(this.messagesRef){
@@ -111,7 +110,6 @@ export default class Messenger extends Component {
       const channel = store.getActiveChannel();
       const channelId = _.get(channel, '_id', null);
       const currentUser = store.getCurrentUser();
-      //const currentUserName = _.get(currentUser, 'name', null);
 
       const message = {
         _id: messageId,
@@ -125,7 +123,7 @@ export default class Messenger extends Component {
 
       this.setState({
         newMessage: '',
-      }) 
+      });
     }
   }
 
