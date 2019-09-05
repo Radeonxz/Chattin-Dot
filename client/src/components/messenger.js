@@ -7,10 +7,10 @@ import {ObjectID} from '../helpers/objectid';
 
 // import avatar from '../images/avatar.jpg'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import SearchUser from './search-user'
-import Userbar from './user-bar'
+import SearchUser from './search-user';
+import Userbar from './user-bar';
 
 export default class Messenger extends Component {
   constructor(props) {
@@ -22,14 +22,6 @@ export default class Messenger extends Component {
       searchUser: '',
       showSearchUser: false,
     }
-
-    this._onResize = this._onResize.bind(this);
-    this.handleSend = this.handleSend.bind(this);
-    this.renderMessage = this.renderMessage.bind(this);
-    this.scrollMessagesToBottom = this.scrollMessagesToBottom.bind(this);
-    // this._onCreateChannel = this._onCreateChannel.bind(this);
-    // this.renderChannelAvatars = this.renderChannelAvatars.bind(this);
-    // this.renderChannelTitle = this.renderChannelTitle.bind(this);
   }
 
   renderChannelAvatars = channel => {
@@ -48,7 +40,6 @@ export default class Messenger extends Component {
       return null;
     }
     const {store} = this.props;
-    // const activeChannel = store.getActiveChannel();
     const members = store.getMembersFromChannel(channel);
     const names = [];
 
@@ -85,22 +76,22 @@ export default class Messenger extends Component {
     store.onCreateNewChannel(channel);
   };
 
-  scrollMessagesToBottom(){
+  scrollMessagesToBottom = () => {
     if(this.messagesRef){
       this.messagesRef.scrollTop = this.messagesRef.scrollHeight;
     }
-  }
+  };
 
-  renderMessage(message) {
+  renderMessage = message => {
     const text = _.get(message, 'body', '');
     const html = _.split(text, '\n').map((m, key) => {
       return <p key = {key} dangerouslySetInnerHTML = {{__html: m}} />
     });
 
     return html;
-  }
+  };
 
-  handleSend() {
+  handleSend = () => {
     const {newMessage} = this.state;
     const {store} = this.props;
 
@@ -125,13 +116,13 @@ export default class Messenger extends Component {
         newMessage: '',
       });
     }
-  }
+  };
 
-  _onResize() {
+  _onResize = () => {
     this.setState({
       height: window.innerHeight
     });
-  }
+  };
 
   componentDidUpdate() {
     this.scrollMessagesToBottom();
@@ -172,13 +163,11 @@ export default class Messenger extends Component {
           <div className = 'content'>
             {_.get(activeChannel, 'isNew') ? <div className = 'toolbar'>
               <label>To:</label>
-              {
-                members.map((user, key) => {
-                  return <span onClick={() => {
-                    store.removeMemberFromChannel(activeChannel, user);
-                  }} key={key}>{_.get(user, 'name')}</span>
-                })
-              }
+              {members.map((user, key) => {
+                return <span onClick={() => {
+                  store.removeMemberFromChannel(activeChannel, user);
+                }} key={key}>{_.get(user, 'name')}</span>
+              })}
 
               <input placeholder='Type name...' onChange = {(event) => {
                 const searchUserText = _.get(event, 'target.value');
