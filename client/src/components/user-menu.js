@@ -30,8 +30,8 @@ export default class UserMenu extends Component {
         {user? <div>
           <h2>Menu</h2>
           <ul className='menu'>
-            {/* <li><button type='button'>My Profile</button></li>
-            <li><button type='button'>Change Password</button></li> */}
+            <li><button type='button'>My Profile</button></li>
+            <li><button type='button'>Change Password</button></li>
             <li>
               <button onClick={() => {
                 if(this.props.onClose) {

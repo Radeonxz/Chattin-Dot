@@ -144,7 +144,7 @@ export default class Messenger extends Component {
     };
 
     const activeChannel = store.getActiveChannel();
-    const messages = store.getMessagesFromChannel(activeChannel);//store.getMessages();
+    const messages = store.getMessagesFromChannel(activeChannel);
     const channels = store.getChannels();
     const members = store.getMembersFromChannel(activeChannel);
 
@@ -155,9 +155,6 @@ export default class Messenger extends Component {
             <button className = 'left-action'><FontAwesomeIcon icon = "cog" /></button>
             <button onClick = {this._onCreateChannel} className = 'right-action'><FontAwesomeIcon icon = "edit" /></button>
             <h2>Messenger</h2>
-            {/*<div className = 'actions'>
-              <button>New message</button>
-            </div>*/}
           </div>
 
           <div className = 'content'>
