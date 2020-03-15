@@ -14,23 +14,23 @@
   "author": "radeonxz",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^4.0.1",
     "body-parser": "^1.18.3",
-    "concurrently": "^4.1.1",
+    "concurrently": "^5.1.0",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
-    "mongodb": "^2.2.33",
+    "mongodb": "^3.5.5",
     "morgan": "^1.9.1",
-    "ws": "^6.1.2"
+    "ws": "^7.2.3"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-0": "^6.24.1",
-    "nodemon": "^1.18.9"
+    "nodemon": "^2.0.2"
   }
 }
