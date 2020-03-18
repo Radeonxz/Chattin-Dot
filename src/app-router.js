@@ -11,6 +11,7 @@ export default class AppRouter {
 
   setupRouter() {
     const app = this.app;
+
     /**
      * @endpoint: /api/users
      * @method: POST
@@ -32,7 +33,6 @@ export default class AppRouter {
      * @endpoint: /api/users/me
      * @method: GET
      **/
-
     app.get("/api/users/me", (req, res, next) => {
       let tokenId = req.get("authorization");
       if (!tokenId) {
@@ -75,7 +75,6 @@ export default class AppRouter {
      * @endpoint: /api/users/:id
      * @method: GET
      **/
-
     app.get("/api/users/:id", (req, res, next) => {
       const userId = _.get(req, "params.id");
 
@@ -96,7 +95,6 @@ export default class AppRouter {
      * @endpoint: /api/users/login
      * @method: POST
      **/
-
     app.post("/api/users/login", (req, res, next) => {
       const body = _.get(req, "body");
       app.models.user
@@ -117,7 +115,6 @@ export default class AppRouter {
      * @endpoint: /api/channels/:id
      * @method: GET
      **/
-
     app.get("/api/channels/:id", (req, res, next) => {
       const channelId = _.get(req, "params.id");
       if (!channelId) {
@@ -156,7 +153,6 @@ export default class AppRouter {
      * @endpoint: /api/me/channels/:id/messages
      * @method: GET
      **/
-
     app.get("/api/channels/:id/messages", (req, res, next) => {
       let tokenId = req.get("authorization");
       if (!tokenId) {
@@ -220,7 +216,6 @@ export default class AppRouter {
      * @endpoint: /api/me/channels
      * @method: GET
      **/
-
     app.get("/api/me/channels", (req, res, next) => {
       let tokenId = req.get("authorization");
       if (!tokenId) {
@@ -291,7 +286,6 @@ export default class AppRouter {
      * @endpoint: /api/me/logout
      * @method: GET
      **/
-
     app.get("api/me/logout", (req, res, next) => {
       let tokenId = req.get("authorization");
       if (!tokenId) {
