@@ -1,7 +1,7 @@
-import {OrderedMap} from 'immutable'
-import _ from 'lodash'
-import Service from './service'
-import Realtime from './realtime'
+import { OrderedMap } from "immutable";
+import _ from "lodash";
+import Service from "./service";
+import Realtime from "./realtime";
 
 export default class Store {
   constructor(appComponent) {
@@ -10,15 +10,15 @@ export default class Store {
     this.messages = new OrderedMap();
     this.channels = new OrderedMap();
     this.activeChannelId = null;
-    
+
     this.token = this.getTokenFromLocalStorage();
 
     this.user = this.getUserFromLocalStorage();
     this.users = new OrderedMap();
 
     this.search = {
-      users: new OrderedMap(),
-    }
+      users: new OrderedMap()
+    };
 
     this.realtime = new Realtime(this);
     this.fetchUserChannels();
@@ -31,24 +31,30 @@ export default class Store {
   fetchUserChannels() {
     const userToken = this.getUserTokenId();
 
-    if(userToken) {
+    if (userToken) {
       const options = {
         headers: {
-          authorization: userToken,
+          authorization: userToken
         }
       };
-      this.service.get(`api/me/channels`, options).then((response) => {
-        const channels = response.data;
+      this.service
+        .get(`api/me/channels`, options)
+        .then(response => {
+          const channels = response.data;
 
-        _.each(channels, (c) => {
-          this.realtime.onAddChannel(c);
+          _.each(channels, c => {
+            this.realtime.onAddChannel(c);
+          });
+
+          const firstChannelId = _.get(channels, "[0]._id", null);
+          this.fetchChannelMessages(firstChannelId);
+        })
+        .catch(err => {
+          console.log(
+            "An error has occured during fetching user channels",
+            err
+          );
         });
-
-        const firstChannelId = _.get(channels, '[0]._id', null);
-        this.fetchChannelMessages(firstChannelId);
-      }).catch((err) => {
-        console.log('An error has occured during fetching user channels', err);
-      })
     }
   }
 
@@ -61,58 +67,61 @@ export default class Store {
   }
 
   getUserTokenId() {
-    return _.get(this.token, '_id', null);
+    return _.get(this.token, "_id", null);
   }
 
   loadUserAvatar(user) {
     return `https://api.adorable.io/avatars/100/${user._id}.png`;
   }
 
-  startSearchUsers(q = '') {
+  startSearchUsers(q = "") {
     // query to db and get list of users
-    const data = {search: q}
+    const data = { search: q };
     this.search.users = this.search.users.clear();
-    this.service.post('api/users/search', data).then((response) => {
-      // searched results
-      const users = _.get(response, 'data', []);
-      _.each(users, (user) => {
-        // cache to this.users
+    this.service
+      .post("api/users/search", data)
+      .then(response => {
+        // searched results
+        const users = _.get(response, "data", []);
+        _.each(users, user => {
+          // cache to this.users
 
-        // add user to this.search.users
-        user.avatar = this.loadUserAvatar(user);
-        const userId = `${user._id}`;
-        this.users = this.users.set(userId, user);
-        this.search.users = this.search.users.set(userId, user);
+          // add user to this.search.users
+          user.avatar = this.loadUserAvatar(user);
+          const userId = `${user._id}`;
+          this.users = this.users.set(userId, user);
+          this.search.users = this.search.users.set(userId, user);
+        });
+
+        // update component
+        this.update();
+      })
+      .catch(err => {
+        console.log("searching error", err);
       });
-
-      // update component
-      this.update();
-    }).catch((err) => {
-      console.log('searching error', err);
-    });
   }
 
   setUserToken(accessToken) {
-    if(!accessToken) {
-      this.localStorage.removeItem('token');
+    if (!accessToken) {
+      this.localStorage.removeItem("token");
       this.token = null;
       return;
     }
     this.token = accessToken;
-    localStorage.setItem('token', JSON.stringify(accessToken));
+    localStorage.setItem("token", JSON.stringify(accessToken));
   }
 
   getTokenFromLocalStorage() {
-    if(this.token) {
+    if (this.token) {
       return this.token;
     }
 
     let token = null;
-    const data = localStorage.getItem('token');
-    if(data) {
+    const data = localStorage.getItem("token");
+    if (data) {
       try {
         token = JSON.parse(data);
-      } catch(err) {
+      } catch (err) {
         console.log(err);
       }
     }
@@ -121,44 +130,46 @@ export default class Store {
 
   getUserFromLocalStorage() {
     let user = null;
-    const data = localStorage.getItem('me');
-    
+    const data = localStorage.getItem("me");
+
     try {
       user = JSON.parse(data);
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
 
-    if(user) {
+    if (user) {
       // api call to backend to verify the current user
       const token = this.getTokenFromLocalStorage();
-      const tokenId = _.get(token, '_id');
+      const tokenId = _.get(token, "_id");
       const options = {
         headers: {
-          authorization: tokenId,
+          authorization: tokenId
         }
-      }
-      this.service.get('api/users/me', options).then((response) => {
-        // user is logged in with tokenId
-        const accessToken = response.data;
-        const user = _.get(accessToken, 'user');
-        this.setCurrentUser(user);
-        this.setUserToken(accessToken);
-      }).catch(err => {
-        this.signOut();
-      });
+      };
+      this.service
+        .get("api/users/me", options)
+        .then(response => {
+          // user is logged in with tokenId
+          const accessToken = response.data;
+          const user = _.get(accessToken, "user");
+          this.setCurrentUser(user);
+          this.setUserToken(accessToken);
+        })
+        .catch(err => {
+          this.signOut();
+        });
     }
     return user;
   }
 
   setCurrentUser(user) {
-
     // set temporary user avatar image url
     user.avatar = this.loadUserAvatar(user);
     this.user = user;
 
-    if(user) {
-      localStorage.setItem('me', JSON.stringify(user));
+    if (user) {
+      localStorage.setItem("me", JSON.stringify(user));
 
       // save user to users collections in local storage
       const userId = `${user._id}`;
@@ -174,24 +185,24 @@ export default class Store {
   }
 
   signOut() {
-    const userId = _.toString(_.get(this.user, '_id', null));
-    const tokenId = _.get(this.token, '_id', null);
+    const userId = _.toString(_.get(this.user, "_id", null));
+    const tokenId = _.get(this.token, "_id", null);
 
     // call server to logout
     const options = {
       headers: {
-        authorization: tokenId,
+        authorization: tokenId
       }
     };
-    this.service.get('api/me/logout', options);
+    this.service.get("api/me/logout", options);
 
     this.user = null;
-    localStorage.removeItem('me');
-    localStorage.removeItem('token');
+    localStorage.removeItem("me");
+    localStorage.removeItem("token");
 
     this.clearCacheData();
 
-    if(userId) {
+    if (userId) {
       this.users = this.users.remove();
     }
     this.update();
@@ -199,11 +210,14 @@ export default class Store {
 
   register(user) {
     return new Promise((resolve, reject) => {
-      this.service.post('api/users', user).then((response) => {
-        return resolve(response.data);
-      }).catch(err => {
-        return reject('An error occured when create user', err);
-      });
+      this.service
+        .post("api/users", user)
+        .then(response => {
+          return resolve(response.data);
+        })
+        .catch(err => {
+          return reject("An error occured when create user", err);
+        });
     });
   }
 
@@ -213,42 +227,49 @@ export default class Store {
 
     const user = {
       email: userEmail,
-      password: password,
-    }
-    console.log('trying to login', user);
+      password: password
+    };
+    console.log("trying to login", user);
 
     return new Promise((resolve, reject) => {
       // api call to backend to login user
-      this.service.post('api/users/login', user).then((response) => {
-        // successfully logged in
-        const accessToken = _.get(response, 'data');
-        console.log('got sth from server', accessToken);
+      this.service
+        .post("api/users/login", user)
+        .then(response => {
+          // successfully logged in
+          const accessToken = _.get(response, "data");
+          console.log("got sth from server", accessToken);
 
-        const user = _.get(accessToken, 'user');
-        this.setCurrentUser(user);
-        this.setUserToken(accessToken);
+          const user = _.get(accessToken, "user");
+          this.setCurrentUser(user);
+          this.setUserToken(accessToken);
 
-        // call to realtime and connect to socket server with current user
-        this.realtime.connect();
+          // call to realtime and connect to socket server with current user
+          this.realtime.connect();
 
-        // start fetching user channel
-        this.fetchUserChannels();
-      }).catch((err) => {
-        // login error
-        console.log('got err from server', err);
-        const message = _.get(err, 'response.data.error.message', 'Login Error');
-        return reject(message);
-      });
+          // start fetching user channel
+          this.fetchUserChannels();
+        })
+        .catch(err => {
+          // login error
+          console.log("got err from server", err);
+          const message = _.get(
+            err,
+            "response.data.error.message",
+            "Login Error"
+          );
+          return reject(message);
+        });
     });
   }
 
   removeMemberFromChannel(channel = null, user = null) {
-    if(!channel || !user) {
+    if (!channel || !user) {
       return;
     }
 
-    const userId = _.get(user, '_id');
-    const channelId = _.get(channel, '_id');
+    const userId = _.get(user, "_id");
+    const channelId = _.get(channel, "_id");
     channel.members = channel.members.remove(userId);
     this.channels = this.channels.set(channelId, channel);
     this.update();
@@ -257,7 +278,7 @@ export default class Store {
   addUserToChannel(channelId, userId) {
     const channel = this.channels.get(channelId);
 
-    if(channel) {
+    if (channel) {
       channel.members = channel.members.set(userId, true);
       this.channels = this.channels.set(channelId, channel);
       this.update();
@@ -269,10 +290,9 @@ export default class Store {
   }
 
   onCreateNewChannel(channel = {}) {
-    const channelId = _.get(channel, '_id');
+    const channelId = _.get(channel, "_id");
     this.addChannel(channelId, channel);
     this.setActiveChannelId(channelId);
-    // console.log(JSON.stringify(this.channels.toJS()));
   }
 
   getCurrentUser() {
@@ -281,24 +301,27 @@ export default class Store {
 
   fetchChannelMessages(channelId) {
     let channel = this.channels.get(channelId);
-    if(channel && !_.get(channel, 'isFetchedMessages')) {
-      const token = _.get(this.token, '_id')
+    if (channel && !_.get(channel, "isFetchedMessages")) {
+      const token = _.get(this.token, "_id");
       const options = {
         headers: {
-          authorization: token,
+          authorization: token
         }
-      }
-      this.service.get(`api/channels/${channelId}/messages`, options).then((response) => {
-        channel.isFetchedMessages = true;       
-        const messages = response.data;
-        
-        _.each(messages, (message) => {
-          this.realtime.onAddMessage(message);
+      };
+      this.service
+        .get(`api/channels/${channelId}/messages`, options)
+        .then(response => {
+          channel.isFetchedMessages = true;
+          const messages = response.data;
+
+          _.each(messages, message => {
+            this.realtime.onAddMessage(message);
+          });
+          this.channels = this.channels.set(channelId, channel);
+        })
+        .catch(err => {
+          console.log("Error!", err);
         });
-        this.channels = this.channels.set(channelId, channel)
-      }).catch((err) => {
-        console.log('Error!', err);
-      });
     }
   }
 
@@ -311,29 +334,27 @@ export default class Store {
   }
 
   getActiveChannel() {
-    const channel = this.activeChannelId ? this.channels.get(this.activeChannelId) : this.channels.first();
+    const channel = this.activeChannelId
+      ? this.channels.get(this.activeChannelId)
+      : this.channels.first();
     return channel;
   }
 
   setMessage(message, notify = false) {
-    const id = _.toString(_.get(message, '_id'));
+    const id = _.toString(_.get(message, "_id"));
     this.messages = this.messages.set(id, message);
     const channelId = _.toString(message.channelId);
     const channel = this.channels.get(channelId);
 
-    if(channel) {
+    if (channel) {
       channel.messages = channel.messages.set(id, true);
-      channel.lastMessage = _.get(message, 'body', '');
+      channel.lastMessage = _.get(message, "body", "");
       channel.notify = notify;
       this.channels = this.channels.set(channelId, channel);
     } else {
       // fetch channel info from server
-      this.service.get(`api/channels/${channelId}`).then((response) => {
-        const channel = _.get(response, 'data');
-        // const users = _.get(channel, 'users');
-        // _.each(users, (user) => {
-        //   this.addUserToCache(user);
-        // });
+      this.service.get(`api/channels/${channelId}`).then(response => {
+        const channel = _.get(response, "data");
         this.realtime.onAddChannel(channel);
       });
     }
@@ -345,34 +366,34 @@ export default class Store {
     const user = this.getCurrentUser();
     message.user = user;
     this.messages = this.messages.set(id, message);
-    const channelId = _.get(message, 'channelId');
+    const channelId = _.get(message, "channelId");
 
-    if(channelId){     
+    if (channelId) {
       let channel = this.channels.get(channelId);
-      
-      channel.lastMessage = _.get(message, 'body', '');
+
+      channel.lastMessage = _.get(message, "body", "");
 
       // send this channel info to the server
       const obj = {
-        action: 'create_channel',
-        payload: channel,
+        action: "create_channel",
+        payload: channel
       };
       this.realtime.send(obj);
 
       // send to the server via websocket to create new message and notifu to other members
       this.realtime.send({
-        action: 'create_message',
-        payload: message,
+        action: "create_message",
+        payload: message
       });
 
-      channel.messages = channel.messages.set(id, true);      
+      channel.messages = channel.messages.set(id, true);
       channel.isNew = false;
       this.channels = this.channels.set(channelId, channel);
     }
 
     this.update();
   }
-  
+
   getMessages() {
     return this.messages.valueSeq();
   }
@@ -380,7 +401,7 @@ export default class Store {
   getMessagesFromChannel(channel) {
     let messages = new OrderedMap();
 
-    if(channel){
+    if (channel) {
       channel.messages.forEach((value, key) => {
         const message = this.messages.get(key);
         messages = messages.set(key, message);
@@ -393,25 +414,16 @@ export default class Store {
   getMembersFromChannel(channel) {
     let members = new OrderedMap();
 
-    if(channel){
-      // channel.members.map((value, key) => {
-      //   const user = users.get(key);
-      //   const loggedUser = this.getCurrentUser();
-
-      //   if(_.get(loggedUser, '_id') !== _.get(user, '_id')) {
-      //     members = members.set(key, user);
-      //   }       
-      // });
-
+    if (channel) {
       channel.members.forEach((value, key) => {
-        const userId = `${key}`
+        const userId = `${key}`;
         const user = this.users.get(userId);
         const loggedUser = this.getCurrentUser();
 
-        if(_.get(loggedUser, '_id') !== _.get(user, '_id')) {
+        if (_.get(loggedUser, "_id") !== _.get(user, "_id")) {
           members = members.set(key, user);
         }
-      })
+      });
     }
 
     return members.valueSeq();
