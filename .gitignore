@@ -13,7 +13,6 @@ yarn-error.log*
 node_modules
 
 client/node_modules
-client/package-lock.json
 
 dist
 nodemon.json
