@@ -34,11 +34,8 @@ app.wss = new Server({
 
 // Connect to MongoDB
 const mongodbURI = process.env.MONGODB_URI;
-const options = {
-  useUnifiedTopology: true,
-};
 new Database()
-  .connect(mongodbURI, options)
+  .connect(mongodbURI)
   .then((db) => {
     console.log("Successfully connected to MongoDB");
     app.db = db;
