@@ -18,29 +18,32 @@ app.use(morgan("dev"));
 // Setup CORS
 app.use(
   cors({
-    exposedHeaders: "*"
+    exposedHeaders: "*",
   })
 );
 
 app.use(
   bodyParser.json({
-    limit: "50mb"
+    limit: "50mb",
   })
 );
 
 app.wss = new Server({
-  server: app.server
+  server: app.server,
 });
 
 // Connect to MongoDB
 const mongodbURI = process.env.MONGODB_URI;
+const options = {
+  useUnifiedTopology: true,
+};
 new Database()
-  .connect(mongodbURI)
-  .then(db => {
+  .connect(mongodbURI, options)
+  .then((db) => {
     console.log("Successfully connected to MongoDB");
     app.db = db;
   })
-  .catch(err => {
+  .catch((err) => {
     throw err;
   });
 
