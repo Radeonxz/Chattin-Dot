@@ -1,5 +1,6 @@
-@import 'https://fonts.googleapis.com/css?family=Poppins:400,600';
-body, html {
+@import "https://fonts.googleapis.com/css?family=Poppins:400,600";
+body,
+html {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -424,7 +425,9 @@ body {
   text-align: right;
   margin-right: 1rem;
 }
-.user-bar .user-form .form-item input[type=email], .user-bar .user-form .form-item input[type=password], .user-bar .user-form .form-item input[type=text] {
+.user-bar .user-form .form-item input[type=email],
+.user-bar .user-form .form-item input[type=password],
+.user-bar .user-form .form-item input[type=text] {
   height: 2rem;
   line-height: 2rem;
   border-bottom: 1px solid #000;
@@ -440,6 +443,7 @@ body {
 .user-bar .user-menu {
   min-width: 8rem;
   position: absolute;
+  background-color: #2ecc71;
   right: 0;
   top: 4.5rem;
   border-top: none;
@@ -479,7 +483,9 @@ body {
 .form-item label {
   font-weight: 600;
 }
-.form-item input[type=email], .form-item input[type=password], .form-item input[type=text] {
+.form-item input[type=email],
+.form-item input[type=password],
+.form-item input[type=text] {
   border: 1px solid rgba(255, 255, 255, 0.7);
   padding: 0.5rem 1rem;
 }
