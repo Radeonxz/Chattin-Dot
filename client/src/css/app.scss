@@ -1,62 +1,63 @@
-@import 'variable';
-@import 'font';
+@import "variable";
+@import "font";
 
 //font-family: 'Poppins', sans-serif;
-@import 'https://fonts.googleapis.com/css?family=Poppins:400,600';
+@import "https://fonts.googleapis.com/css?family=Poppins:400,600";
 
-body, html{
+body,
+html {
   margin: 0;
   padding: 0;
   height: 100%;
 }
 
-body{
+body {
   color: $body-color;
   background: $gradient-color;
   font-size: 1.3rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
-*{
+* {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
 
-.app-messenger{
+.app-messenger {
   display: flex;
   flex-direction: column;
-  .header{
+  .header {
     height: $header-height;
     //background: red;
     display: flex;
     flex-direction: row;
     border-bottom: 1px solid $border-color;
-    .left{
+    .left {
       width: $left-sidebar-width;
       position: relative;
-      .left-action{
+      .left-action {
         position: absolute;
         left: 0.9rem;
         top: 0;
       }
-      .right-action{
+      .right-action {
         position: absolute;
         right: 0.9rem;
         top: 0;
       }
-      h2{
+      h2 {
         line-height: $header-line-height;
-        font-size: 1.0rem;
+        font-size: 1rem;
         font-weight: 600;
         display: block;
         text-align: center;
       }
-      button{
+      button {
         background: none;
         line-height: $header-line-height;
         border: 0 none;
-        font-size: 1.0rem;
+        font-size: 1rem;
         cursor: pointer;
       }
       // .actions{
@@ -64,25 +65,25 @@ body{
       //   padding: 0 20px;
       // }
     }
-    .right{
+    .right {
       width: $right-sidebar-width;
-      .user-bar{
+      .user-bar {
         display: flex;
         justify-content: flex-end;
         padding: 0 10px;
         position: relative;
         top: 50%;
         transform: translateY(-50%);
-        .profile-name{                    
-          p{
+        .profile-name {
+          p {
             margin: 0 0.5rem;
             position: relative;
             top: 50%;
             transform: translateY(-50%);
           }
         }
-        .profile-image{
-          img{
+        .profile-image {
+          img {
             margin: 0 0.5rem;
             width: 3rem;
             height: 3rem;
@@ -95,9 +96,9 @@ body{
         }
       }
     }
-    .content{
+    .content {
       width: $content-width;
-      h2{
+      h2 {
         text-align: center;
         position: relative;
         top: 50%;
@@ -105,51 +106,51 @@ body{
       }
     }
   }
-  .main{
+  .main {
     height: 100%;
     display: flex;
     overflow: hidden;
     //background: green;
-    .sidebar-left{
+    .sidebar-left {
       //background: blue;
       width: $left-sidebar-width;
       border-right: 1px solid $border-color;
     }
-    .sidebar-right{
+    .sidebar-right {
       //background: black;
       width: $right-sidebar-width;
       border-left: 1px solid $border-color;
-      .title{
+      .title {
         font-size: 1.1rem;
         font-weight: 600;
         padding: 0.5rem;
       }
     }
-    .content{
+    .content {
       overflow: hidden;
       width: $content-width;
       display: flex;
       flex-direction: column;
-      .messages{
+      .messages {
         flex-grow: 1;
       }
-      .messenger-input{
+      .messenger-input {
         border-top: 1px solid $border-color;
         border-left: 1px solid $border-color;
         display: flex;
         flex-direction: row;
         height: 4rem;
-        .text-input{
+        .text-input {
           flex-grow: 1;
-          textarea{
+          textarea {
             border: 0 none;
             width: 100%;
             height: 100%;
             padding: 0.7rem 1rem;
           }
         }
-        .actions{
-          button.send{
+        .actions {
+          button.send {
             background: $primary-color;
             color: #fff;
             border: 0 none;
@@ -162,40 +163,40 @@ body{
   }
 }
 
-.messages{
+.messages {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  height: 100%; 
-  .message{
+  height: 100%;
+  .message {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     margin: 2.7rem 0.3rem;
-    .msg-user-img{
-      img{
+    .msg-user-img {
+      img {
         width: 2rem;
         height: 2rem;
         border-radius: 50%;
       }
     }
-    .msg-body{
+    .msg-body {
       padding-left: 0.5rem;
-      .msg-author{
+      .msg-author {
         font-size: 0.9rem;
         line-height: 2rem;
       }
-      .msg-text{
+      .msg-text {
         background: rgba(0, 0, 0, 0.15);
         font-size: 0.9rem;
         padding: 0.7rem;
         border-radius: 0.7rem;
       }
     }
-    &.me{
+    &.me {
       justify-content: flex-end;
-      .msg-body{
-        .msg-text{
+      .msg-body {
+        .msg-text {
           background-color: $primary-color;
           color: #fff;
         }
@@ -204,63 +205,63 @@ body{
   }
 }
 
-.channels{
+.channels {
   overflow-y: auto;
   height: 100%;
-  .channel{
+  .channel {
     cursor: pointer;
     display: flex;
     border-bottom: 1px solid $border-color;
     padding: 0.5rem;
-    .user-img{
+    .user-img {
       width: 2.5rem;
-      img{
+      img {
         // width: 2.5rem;
         // height: 2.5rem;
         // border-radius: 50%;
         max-width: 100%;
       }
-      .channel-avatars{
+      .channel-avatars {
         overflow: hidden;
         width: 2.5rem;
         height: 2.5rem;
         border-radius: 50%;
         background-color: #ccc;
         position: relative;
-        &.channel-avatars-1{
-          img{
+        &.channel-avatars-1 {
+          img {
             width: 100%;
             height: 100%;
             border-radius: 50%;
           }
         }
-        &.channel-avatars-2{
-          img{
+        &.channel-avatars-2 {
+          img {
             width: 50%;
             height: 100%;
             position: absolute;
             right: 0;
             top: 0;
-            &:first-child{
+            &:first-child {
               left: 0;
               top: 0;
             }
           }
         }
-        &.channel-avatars-3{
-          img{
+        &.channel-avatars-3 {
+          img {
             width: 50%;
             height: 50%;
             position: absolute;
             right: 0;
             top: 0;
-            &:first-child{
+            &:first-child {
               left: 0;
               top: 0;
               width: 50%;
               height: 100%;
             }
-            &:last-child{
+            &:last-child {
               bottom: 0;
               right: 0;
               top: 1.25rem;
@@ -269,14 +270,14 @@ body{
             }
           }
         }
-        &.channel-avatars-4{
-          img{
+        &.channel-avatars-4 {
+          img {
             width: 50%;
             height: 50%;
             position: absolute;
             right: 0;
             top: 0;
-            &:first-child{
+            &:first-child {
               left: 0;
               top: 0;
               width: 50%;
@@ -289,7 +290,7 @@ body{
               width: 50%;
               height: 50%;
             }
-            &:last-child{
+            &:last-child {
               left: 0;
               bottom: 0;
               top: 1.25rem;
@@ -298,28 +299,28 @@ body{
         }
       }
     }
-    .channel-info{
+    .channel-info {
       flex-grow: 1;
       padding: 0.2rem 0 0 0.3rem;
       overflow: hidden;
-      h2{
+      h2 {
         font-size: 0.9rem;
         font-weight: 600;
         white-space: nowrap;
         overflow: hidden;
       }
-      p{
+      p {
         font-size: 0.7rem;
         white-space: nowrap;
         overflow: hidden;
       }
     }
-    &.active{
+    &.active {
       background: rgba(0, 0, 0, 0.05);
     }
-    &.notify{
-      .channel-info{
-        p{
+    &.notify {
+      .channel-info {
+        p {
           color: $primary-color;
         }
       }
@@ -327,41 +328,41 @@ body{
   }
 }
 
-.members{
-  .member{
+.members {
+  .member {
     display: flex;
     border-bottom: 1px solid $border-color;
     padding: 0.5rem 0.3rem;
-    .user-img{
+    .user-img {
       width: 2.5rem;
       position: relative;
-      img{
+      img {
         width: 2.5rem;
         height: 2.5rem;
         border-radius: 50%;
       }
-      .user-status{
+      .user-status {
         display: block;
         position: absolute;
         right: 0;
         bottom: 0.6rem;
         border: 1px solid #fff;
-        width:0.7rem;
+        width: 0.7rem;
         height: 0.7rem;
         background: #ccc;
         border-radius: 50%;
-        &.online{
+        &.online {
           background: $primary-color;
         }
       }
     }
-    .member-info{
+    .member-info {
       flex-grow: 1;
       padding: 0.2rem 0 0 0.3rem;
-      h2{
+      h2 {
         font-size: 0.9rem;
       }
-      p{
+      p {
         font-size: 0.7rem;
       }
     }
@@ -370,15 +371,15 @@ body{
 
 //h2.title{
 //    font-size: 1.1rem;
-//    font-weight: 600; 
+//    font-weight: 600;
 //}
 
-.toolbar{
+.toolbar {
   height: $header-line-height;
   display: flex;
   flex-direction: row;
   position: relative;
-  span{
+  span {
     line-height: 1rem;
     height: 1.8rem;
     background: $primary-color;
@@ -389,11 +390,11 @@ body{
     padding: 0.4rem 0.6rem;
     border-radius: 0.3rem;
   }
-  label{
+  label {
     font-size: 1rem;
     line-height: $header-line-height;
   }
-  input{
+  input {
     height: 2rem;
     line-height: 2rem;
     background: #fff;
@@ -402,7 +403,7 @@ body{
     border: 0 none;
     border-radius: 3px;
   }
-  .search-user{
+  .search-user {
     min-width: 11rem;
     position: absolute;
     z-index: 1;
@@ -410,32 +411,32 @@ body{
     left: 0;
     top: 5.5rem;
     border-top: 0 none;
-    
-    .user-list{
+
+    .user-list {
       display: flex;
       flex-direction: column;
-      .user{
+      .user {
         display: flex;
         flex-direction: row;
         padding: 0.4rem;
         border-bottom: 1px solid $border-color;
         cursor: pointer;
-        img{
+        img {
           width: 2rem;
           height: 2rem;
           border-radius: 50%;
           //margin-top: 0.5rem;
         }
-        h2{
+        h2 {
           font-size: 0.9rem;
           padding: 0.3rem 0 0 0.2rem;
           flex-grow: 1;
           transform: translateY(0);
         }
-        &:last-child{
+        &:last-child {
           border-bottom: none;
         }
-        &:hover{
+        &:hover {
           background: rgba(0, 0, 0, 0.02);
         }
       }
@@ -443,9 +444,9 @@ body{
   }
 }
 
-.user-bar{
+.user-bar {
   position: relative;
-  button.login-btn{
+  button.login-btn {
     height: $header-height;
     padding: 1rem 0;
     border: 0 none;
@@ -456,8 +457,8 @@ body{
     font-size: 1.3rem;
     cursor: pointer;
   }
-  
-  .user-form{
+
+  .user-form {
     position: absolute;
     top: $header-height;
     background: #fff;
@@ -465,23 +466,25 @@ body{
     border: 1px solid $border-color;
     border-top: 0 none;
     padding: 2rem;
-    .form-item{
-      label{
+    .form-item {
+      label {
         height: 2rem;
         min-width: 8rem;
         text-align: right;
         margin-right: 1rem;
       }
-      input[type='email'], input[type='password'], input[type='text']{
+      input[type="email"],
+      input[type="password"],
+      input[type="text"] {
         height: 2rem;
         line-height: 2rem;
         border-bottom: 1px solid #000;
       }
-      &:active{
+      &:active {
         border-bottom: none;
       }
     }
-    .form-actions{
+    .form-actions {
       display: flex;
       flex-direction: row;
       justify-content: flex-end;
@@ -490,19 +493,19 @@ body{
   .user-menu {
     min-width: 8rem;
     position: absolute;
-    background-color: coral;
+    background-color: $primary-color;
     right: 0;
     top: 4.5rem;
     // border: 1px solid $border-color;
     border-top: none;
-    ul{
+    ul {
       padding: 0;
       margin: 0;
       list-style: none;
-      li{
+      li {
         border-top: 1px solid $border-color;
         padding: 1rem 2rem;
-        button{
+        button {
           background: none;
           border: 0 none;
           display: block;
@@ -510,12 +513,12 @@ body{
           text-align: center;
           cursor: pointer;
         }
-        &:hover{
+        &:hover {
           background: rgba(0, 0, 0, 0.09);
         }
       }
     }
-    h2{
+    h2 {
       font-size: 1.5rem;
       font-weight: 600;
       margin: 0;
@@ -525,60 +528,62 @@ body{
   }
 }
 
-.form-item{
+.form-item {
   display: flex;
   margin-bottom: 1rem;
-  label{
+  label {
     font-weight: 600;
   }
-  input[type='email'], input[type='password'], input[type='text']{
+  input[type="email"],
+  input[type="password"],
+  input[type="text"] {
     border: 1px solid $border-color;
     padding: 0.5rem 1rem;
   }
 }
 
-.form-info{
+.form-info {
   text-align: center;
   margin-bottom: 1rem;
-  h6{
+  h6 {
     font-weight: normal;
   }
 }
 
-.form-actions{
-  button{
+.form-actions {
+  button {
     border: 0 none;
     padding: 0.7rem 2.5rem;
     text-align: center;
-    &.primary{
+    &.primary {
       background: $primary-color;
       color: #fff;
     }
   }
 }
 
-.app-message{
+.app-message {
   font-size: 1.3rem;
   text-align: center;
   border: 1px solid $primary-color;
   border-radius: 0.3rem;
   margin: 0 0 1.6rem 0;
-  &.error{
+  &.error {
     background: $danger-color;
     border-color: $danger-color;
     color: #fff;
   }
 }
 
-.user-status{
+.user-status {
   font-size: 0.9rem;
   color: $body-color;
-  &.online{
+  &.online {
     color: $primary-color;
   }
 }
 
-.app-warning-state{
+.app-warning-state {
   font-size: 0.9rem;
   padding: 2.3rem 0.9rem;
   color: $danger-color;
