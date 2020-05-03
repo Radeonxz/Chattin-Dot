@@ -39,17 +39,17 @@ export default class Store {
       };
       this.service
         .get(`api/me/channels`, options)
-        .then(response => {
+        .then((response) => {
           const channels = response.data;
 
-          _.each(channels, c => {
+          _.each(channels, (c) => {
             this.realtime.onAddChannel(c);
           });
 
           const firstChannelId = _.get(channels, "[0]._id", null);
           this.fetchChannelMessages(firstChannelId);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(
             "An error has occured during fetching user channels",
             err
@@ -80,10 +80,10 @@ export default class Store {
     this.search.users = this.search.users.clear();
     this.service
       .post("api/users/search", data)
-      .then(response => {
+      .then((response) => {
         // searched results
         const users = _.get(response, "data", []);
-        _.each(users, user => {
+        _.each(users, (user) => {
           // cache to this.users
 
           // add user to this.search.users
@@ -96,7 +96,7 @@ export default class Store {
         // update component
         this.update();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("searching error", err);
       });
   }
@@ -149,14 +149,14 @@ export default class Store {
       };
       this.service
         .get("api/users/me", options)
-        .then(response => {
+        .then((response) => {
           // user is logged in with tokenId
           const accessToken = response.data;
           const user = _.get(accessToken, "user");
           this.setCurrentUser(user);
           this.setUserToken(accessToken);
         })
-        .catch(err => {
+        .catch((err) => {
           this.signOut();
         });
     }
@@ -212,10 +212,10 @@ export default class Store {
     return new Promise((resolve, reject) => {
       this.service
         .post("api/users", user)
-        .then(response => {
+        .then((response) => {
           return resolve(response.data);
         })
-        .catch(err => {
+        .catch((err) => {
           return reject("An error occured when create user", err);
         });
     });
@@ -223,7 +223,6 @@ export default class Store {
 
   login(email = null, password = null) {
     const userEmail = _.toLower(email);
-    // const _this = this;
 
     const user = {
       email: userEmail,
@@ -235,7 +234,7 @@ export default class Store {
       // api call to backend to login user
       this.service
         .post("api/users/login", user)
-        .then(response => {
+        .then((response) => {
           // successfully logged in
           const accessToken = _.get(response, "data");
           console.log("got sth from server", accessToken);
@@ -250,7 +249,7 @@ export default class Store {
           // start fetching user channel
           this.fetchUserChannels();
         })
-        .catch(err => {
+        .catch((err) => {
           // login error
           console.log("got err from server", err);
           const message = _.get(
@@ -264,9 +263,7 @@ export default class Store {
   }
 
   removeMemberFromChannel(channel = null, user = null) {
-    if (!channel || !user) {
-      return;
-    }
+    if (!channel || !user) return;
 
     const userId = _.get(user, "_id");
     const channelId = _.get(channel, "_id");
@@ -310,16 +307,16 @@ export default class Store {
       };
       this.service
         .get(`api/channels/${channelId}/messages`, options)
-        .then(response => {
+        .then((response) => {
           channel.isFetchedMessages = true;
           const messages = response.data;
 
-          _.each(messages, message => {
+          _.each(messages, (message) => {
             this.realtime.onAddMessage(message);
           });
           this.channels = this.channels.set(channelId, channel);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log("Error!", err);
         });
     }
@@ -327,9 +324,7 @@ export default class Store {
 
   setActiveChannelId(id) {
     this.activeChannelId = id;
-
     this.fetchChannelMessages(id);
-
     this.update();
   }
 
@@ -353,7 +348,7 @@ export default class Store {
       this.channels = this.channels.set(channelId, channel);
     } else {
       // fetch channel info from server
-      this.service.get(`api/channels/${channelId}`).then(response => {
+      this.service.get(`api/channels/${channelId}`).then((response) => {
         const channel = _.get(response, "data");
         this.realtime.onAddChannel(channel);
       });
@@ -370,7 +365,6 @@ export default class Store {
 
     if (channelId) {
       let channel = this.channels.get(channelId);
-
       channel.lastMessage = _.get(message, "body", "");
 
       // send this channel info to the server

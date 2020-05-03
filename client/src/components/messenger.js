@@ -24,7 +24,7 @@ export default class Messenger extends Component {
     };
   }
 
-  renderChannelAvatars = channel => {
+  renderChannelAvatars = (channel) => {
     const { store } = this.props;
     const members = store.getMembersFromChannel(channel);
     const maxDisplay = 4;
@@ -55,7 +55,7 @@ export default class Messenger extends Component {
     const members = store.getMembersFromChannel(channel);
     const names = [];
 
-    members.forEach(user => {
+    members.forEach((user) => {
       const name = _.get(user, "name");
       names.push(name);
     });
@@ -96,7 +96,7 @@ export default class Messenger extends Component {
     }
   };
 
-  renderMessage = message => {
+  renderMessage = (message) => {
     const text = _.get(message, "body", "");
     const html = _.split(text, "\n").map((m, key) => {
       return <p key={key} dangerouslySetInnerHTML={{ __html: m }} />;
@@ -194,7 +194,7 @@ export default class Messenger extends Component {
 
                 <input
                   placeholder="Type name..."
-                  onChange={event => {
+                  onChange={(event) => {
                     const searchUserText = _.get(event, "target.value");
                     this.setState(
                       {
@@ -212,7 +212,7 @@ export default class Messenger extends Component {
 
                 {this.state.showSearchUser ? (
                   <SearchUser
-                    onSelect={user => {
+                    onSelect={(user) => {
                       this.setState(
                         {
                           showSearchUser: false,
@@ -245,7 +245,7 @@ export default class Messenger extends Component {
               {channels.map((channel, key) => {
                 return (
                   <div
-                    onClick={key => {
+                    onClick={(key) => {
                       store.setActiveChannelId(channel._id);
                     }}
                     key={channel._id}
@@ -273,7 +273,7 @@ export default class Messenger extends Component {
           </div>
 
           <div className="content">
-            <div ref={ref => (this.messagesRef = ref)} className="messages">
+            <div ref={(ref) => (this.messagesRef = ref)} className="messages">
               {messages.map((message, index) => {
                 const user = _.get(message, "user");
                 return (
@@ -301,12 +301,12 @@ export default class Messenger extends Component {
               <div className="messenger-input">
                 <div className="text-input">
                   <textarea
-                    onKeyUp={event => {
+                    onKeyUp={(event) => {
                       if (event.key === "Enter" && !event.shiftKey) {
                         this.handleSend();
                       }
                     }}
-                    onChange={event => {
+                    onChange={(event) => {
                       this.setState({
                         newMessage: _.get(event, "target.value")
                       });
