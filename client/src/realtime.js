@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import { OrderedMap } from 'immutable';
-import { webSocketURL } from './config';
+import _ from "lodash";
+import { OrderedMap } from "immutable";
+import { webSocketURL } from "./config";
 
 export default class realtime {
   constructor(store) {
@@ -15,7 +15,7 @@ export default class realtime {
     const store = this.store;
     window.setInterval(() => {
       const user = store.getCurrentUser();
-      if(user && !this.isConnected) {
+      if (user && !this.isConnected) {
         this.connect();
       }
     }, 3000);
@@ -25,7 +25,7 @@ export default class realtime {
     let message = {};
     try {
       message = JSON.parse(msg);
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
     return message;
@@ -34,27 +34,29 @@ export default class realtime {
   readMessage(msg) {
     const store = this.store;
     const currentUser = store.getCurrentUser();
-    const currentUserId = _.toString(_.get(currentUser, '_id'));
+    const currentUserId = _.toString(_.get(currentUser, "_id"));
     const message = this.decodeMessage(msg);
-    const action = _.get(message, 'action', '');
-    const payload = _.get(message, 'payload');
-    switch(action) {
-      case 'user_online':
+    const action = _.get(message, "action", "");
+    const payload = _.get(message, "payload");
+    switch (action) {
+      case "user_online":
         const isOnline = true;
-        this.onUpdateUserStatus(payload, isOnline);  
+        this.onUpdateUserStatus(payload, isOnline);
         break;
 
-      case 'user_offline':
+      case "user_offline":
         this.onUpdateUserStatus(payload, false);
         break;
 
-      case 'message_added':
+      case "message_added":
         const activeChannel = store.getActiveChannel();
-        let notify = _.get(activeChannel, '_id') !== _.get(payload, 'channelId') && currentUserId !== _.get(payload, 'userId');
+        let notify =
+          _.get(activeChannel, "_id") !== _.get(payload, "channelId") &&
+          currentUserId !== _.get(payload, "userId");
         this.onAddMessage(payload, notify);
         break;
 
-      case 'channel_added':
+      case "channel_added":
         // check payload object and insert new channel to store
         this.onAddChannel(payload);
         break;
@@ -67,10 +69,8 @@ export default class realtime {
   onUpdateUserStatus(userId, isOnline = false) {
     const store = this.store;
 
-    // user.online = isOnline;
-    // this.users = this.users.set(userId, user);
     store.users = store.users.update(userId, (user) => {
-      if(user) {
+      if (user) {
         user.online = isOnline;
       }
       return user;
@@ -82,19 +82,19 @@ export default class realtime {
   onAddMessage(payload, notify = false) {
     const store = this.store;
     const currentUser = store.getCurrentUser();
-    const currentUserId = _.toString(_.get(currentUser, '_id'));
-    let user = _.get(payload, 'user');
+    const currentUserId = _.toString(_.get(currentUser, "_id"));
+    let user = _.get(payload, "user");
     // add this user to cache
     user = store.addUserToCache(user);
 
     const messageObject = {
       _id: payload._id,
-      body: _.get(payload, 'body', ''),
-      userId: _.get(payload, 'userId'),
-      channelId: _.get(payload, 'channelId'),
-      created: _.get(payload, 'created', new Date()),
-      me: currentUserId === _.toString(_.get(payload, 'userId')),
-      user: user,
+      body: _.get(payload, "body", ""),
+      userId: _.get(payload, "userId"),
+      channelId: _.get(payload, "channelId"),
+      created: _.get(payload, "created", new Date()),
+      me: currentUserId === _.toString(_.get(payload, "userId")),
+      user
     };
 
     store.setMessage(messageObject, notify);
@@ -102,20 +102,19 @@ export default class realtime {
 
   onAddChannel(payload) {
     const store = this.store;
-    const channelId = _.toString(_.get(payload, '_id'));
+    const channelId = _.toString(_.get(payload, "_id"));
     const userId = `${payload.userId}`;
-    const users = _.get(payload, 'users', []);
+    const users = _.get(payload, "users", []);
 
     let channel = {
       _id: channelId,
-      title: _.get(payload, 'title', ''),
-      lastMessage: _.get(payload, 'lastMessage', ''),
+      title: _.get(payload, "title", ""),
+      lastMessage: _.get(payload, "lastMessage", ""),
       members: new OrderedMap(),
       messages: new OrderedMap(),
       isNew: false,
-      userId: userId,
-      created: new Date(),
-      // updated: new Date(),
+      userId,
+      created: new Date()
     };
 
     _.each(users, (user) => {
@@ -125,9 +124,11 @@ export default class realtime {
       channel.members = channel.members.set(memberId, true);
     });
 
-    const channelMessages = store.messages.filter((m) => _.toString(m.channelId) === channelId);
+    const channelMessages = store.messages.filter(
+      (m) => _.toString(m.channelId) === channelId
+    );
     channelMessages.forEach((msg) => {
-      const msgId = _.toString(_.get(msg, '_id'));
+      const msgId = _.toString(_.get(msg, "_id"));
       channel.messages = channel.messages.set(msgId, true);
     });
 
@@ -136,7 +137,7 @@ export default class realtime {
 
   send(msg = {}) {
     const isConnected = this.isConnected;
-    if(this.ws && isConnected) {
+    if (this.ws && isConnected) {
       const msgString = JSON.stringify(msg);
       this.ws.send(msgString);
     }
@@ -145,37 +146,35 @@ export default class realtime {
   authtication() {
     const store = this.store;
     const tokenId = store.getUserTokenId();
-    if(tokenId) {
+    if (tokenId) {
       const message = {
-        action: 'auth',
+        action: "auth",
         payload: `${tokenId}`
-      }
+      };
       this.send(message);
     }
   }
 
   connect() {
-    console.log('Connecting to server...');
-    const ws= new WebSocket(webSocketURL);
+    console.log("Connecting to server...");
+    const ws = new WebSocket(webSocketURL);
     this.ws = ws;
     ws.onopen = () => {
       this.isConnected = true;
       this.authtication();
 
       ws.onmessage = (event) => {
-        this.readMessage(_.get(event, 'data'));
-        // console.log('CLIENT server says', event.data);
-      }
+        this.readMessage(_.get(event, "data"));
+      };
     };
 
     ws.onclose = () => {
       this.isConnected = false;
-      // this.store.update();
-    }
+    };
 
     ws.onerror = () => {
       this.isConnected = false;
       this.store.update();
-    }
+    };
   }
 }
