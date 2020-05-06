@@ -1,8 +1,8 @@
-import User from './user';
-import Token from './token';
-import Connection from './connection';
-import Channel from './channel';
-import Message from './message';
+import User from "./user";
+import Token from "./token";
+import Connection from "./connection";
+import Channel from "./channel";
+import Message from "./message";
 
 export default class Model {
   constructor(app) {

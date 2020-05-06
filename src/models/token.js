@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import { ObjectId } from 'mongodb';
-import { OrderedMap } from 'immutable';
+import _ from "lodash";
+import { ObjectId } from "mongodb";
+import { OrderedMap } from "immutable";
 
 export default class Token {
   constructor(app) {
@@ -14,26 +14,33 @@ export default class Token {
       // remove user token from cache
       this.token = this.tokens.remove(tokenId);
       // remove tokenId from tokens collection
-      this.app.db.collection('tokens').remove({_id: new ObjectId(tokenId)}, (err, info) => {
-        return err ? reject(err) : resolve(info);
-      });
+      this.app.db
+        .collection("tokens")
+        .remove({ _id: new ObjectId(tokenId) }, (err, info) => {
+          return err ? reject(err) : resolve(info);
+        });
     });
   }
 
   loadTokenAndUser(id) {
     return new Promise((resolve, reject) => {
-      this.load(id).then((token) => {
-        const userId = `${token.userId}`;
+      this.load(id)
+        .then((token) => {
+          const userId = `${token.userId}`;
 
-        this.app.models.user.load(userId).then((user) => {
-          token.user = user;
-          return resolve(token);
-        }).catch((err) => {
+          this.app.models.user
+            .load(userId)
+            .then((user) => {
+              token.user = user;
+              return resolve(token);
+            })
+            .catch((err) => {
+              return reject(err);
+            });
+        })
+        .catch((err) => {
           return reject(err);
         });
-      }).catch((err) => {
-        return reject(err);
-      });
     });
   }
 
@@ -43,12 +50,12 @@ export default class Token {
     return new Promise((resolve, reject) => {
       // check token in cache, if not found in cache then query db
       const tokenFromCache = this.tokens.get(id);
-      if(tokenFromCache) {
+      if (tokenFromCache) {
         return resolve(tokenFromCache);
       }
 
       this.findTokenById(id, (err, token) => {
-        if(!err && token) {
+        if (!err && token) {
           const tokenId = token._id.toString();
           this.tokens = this.tokens.set(tokenId, token);
         }
@@ -60,10 +67,10 @@ export default class Token {
   findTokenById(id, callback = () => {}) {
     // console.log('Begin to query token from db...');
     const idObject = new ObjectId(id);
-    const query = {_id: idObject};
-    this.app.db.collection('tokens').findOne(query, (err, result) => {
-      if(err || !result) {
-        return callback({message: 'Not found'}, null);
+    const query = { _id: idObject };
+    this.app.db.collection("tokens").findOne(query, (err, result) => {
+      if (err || !result) {
+        return callback({ message: "Not found" }, null);
       }
 
       return callback(null, result);
@@ -74,11 +81,11 @@ export default class Token {
     // const oneDate = moment().add(1, 'days').toDate();
     const token = {
       userId: userId,
-      created: new Date(),
+      created: new Date()
       // expiored: oneDate,
-    }
+    };
     return new Promise((resolve, reject) => {
-      this.app.db.collection('tokens').insertOne(token, (err, info) => {
+      this.app.db.collection("tokens").insertOne(token, (err, info) => {
         return err ? reject(err) : resolve(token);
       });
     });
