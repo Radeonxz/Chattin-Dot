@@ -45,7 +45,7 @@ export default class User {
     return new Promise((resolve, reject) => {
       const regex = new RegExp(q, "i");
       const query = {
-        $or: [{ name: { $regex: regex } }, { email: { $regex: regex } }],
+        $or: [{ name: { $regex: regex } }, { email: { $regex: regex } }]
       };
       this.app.db
         .collection("users")
@@ -150,22 +150,22 @@ export default class User {
         do: () => {
           const name = _.get(user, "name", "");
           return name.length;
-        },
+        }
       },
       email: {
         errorMessage: "email is incorrect",
         do: () => {
           const email = _.get(user, "email", "");
           return !email.length || !isEmail(email) ? false : true;
-        },
+        }
       },
       password: {
         errorMessage: "password is required and more than 8 characters",
         do: () => {
           const password = _.get(user, "password", "");
           return !password.length || password.length < 8 ? false : true;
-        },
-      },
+        }
+      }
     };
 
     fields.forEach((field) => {
@@ -197,7 +197,7 @@ export default class User {
         name: `${_.trim(_.get(user, "name"))}`,
         email: email,
         password: hashPassword,
-        created: new Date(),
+        created: new Date()
       };
       return callback(null, userFormatted);
     });

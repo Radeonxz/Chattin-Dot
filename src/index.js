@@ -18,18 +18,18 @@ app.use(morgan("dev"));
 // Setup CORS
 app.use(
   cors({
-    exposedHeaders: "*",
+    exposedHeaders: "*"
   })
 );
 
 app.use(
   bodyParser.json({
-    limit: "50mb",
+    limit: "50mb"
   })
 );
 
 app.wss = new Server({
-  server: app.server,
+  server: app.server
 });
 
 // Connect to MongoDB

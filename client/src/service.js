@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 // const apiURL = 'http://localhost:3001';
 
 export default class Service {
@@ -8,7 +8,11 @@ export default class Service {
     return axios.get(url, options);
   }
 
-  post(endpoint = '', data = {}, options = {headers: {'Content-Type': 'application/json'}}) {
+  post(
+    endpoint = "",
+    data = {},
+    options = { headers: { "Content-Type": "application/json" } }
+  ) {
     // const url = `${apiURL}/${endpoint}`;
     const url = `/${endpoint}`;
     return axios.post(url, data, options);
