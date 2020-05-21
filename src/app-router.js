@@ -20,11 +20,11 @@ export default class AppRouter {
       const body = req.body;
       app.models.user
         .create(body)
-        .then(user => {
+        .then((user) => {
           _.unset(user, "password");
           return res.status(200).json(user);
         })
-        .catch(err => {
+        .catch((err) => {
           return res.status(400).json(err);
         });
     });
@@ -42,11 +42,11 @@ export default class AppRouter {
 
       app.models.token
         .loadTokenAndUser(tokenId)
-        .then(token => {
+        .then((token) => {
           _.unset(token, "user.password");
           return res.json(token);
         })
-        .catch(err => {
+        .catch((err) => {
           return res.status(401).json({
             error: err
           });
@@ -61,10 +61,10 @@ export default class AppRouter {
       const keyword = _.get(req, "body.search", "");
       app.models.user
         .search(keyword)
-        .then(results => {
+        .then((results) => {
           return res.status(200).json(results);
         })
-        .catch(err => {
+        .catch((err) => {
           return res.status(404).json({
             error: "Not Found"
           });
@@ -80,11 +80,11 @@ export default class AppRouter {
 
       app.models.user
         .load(userId)
-        .then(user => {
+        .then((user) => {
           _.unset(user, "password");
           return res.status(200).json(user);
         })
-        .catch(err => {
+        .catch((err) => {
           return res.status(404).json({
             error: err
           });
@@ -99,12 +99,12 @@ export default class AppRouter {
       const body = _.get(req, "body");
       app.models.user
         .login(body)
-        .then(token => {
+        .then((token) => {
           console.log("successfully logged in", token);
           _.unset(token, "user.password");
           return res.status(200).json(token);
         })
-        .catch(err => {
+        .catch((err) => {
           return res.status(401).json({
             error: err
           });
@@ -123,7 +123,7 @@ export default class AppRouter {
 
       app.models.channel
         .load(channelId)
-        .then(channel => {
+        .then((channel) => {
           // fetch all the users that from members
           const members = channel.members;
           const query = {
@@ -136,15 +136,15 @@ export default class AppRouter {
           };
           app.models.user
             .find(query, options)
-            .then(users => {
+            .then((users) => {
               channel.users = users;
               return res.status(200).json(channel);
             })
-            .catch(err => {
+            .catch((err) => {
               return res.status(404).json({ error: { message: "Not Found." } });
             });
         })
-        .catch(err => {
+        .catch((err) => {
           return res.status(404).json({ error: { message: "Not Found." } });
         });
     });
@@ -162,7 +162,7 @@ export default class AppRouter {
 
       app.models.token
         .loadTokenAndUser(tokenId)
-        .then(token => {
+        .then((token) => {
           const userId = token.userId;
 
           // check user is logged in
@@ -179,10 +179,10 @@ export default class AppRouter {
           // load channel
           this.app.models.channel
             .load(channelId)
-            .then(c => {
+            .then((c) => {
               const memberIds = _.get(c, "members");
               const members = [];
-              _.each(memberIds, id => {
+              _.each(memberIds, (id) => {
                 members.push(_.toString(id));
               });
 
@@ -194,20 +194,20 @@ export default class AppRouter {
 
               this.app.models.message
                 .getChannelMessages(channelId, limit, offset)
-                .then(messages => {
+                .then((messages) => {
                   return res.status(200).json(messages);
                 })
-                .catch(err => {
+                .catch((err) => {
                   return res
                     .status(404)
                     .json({ error: { message: "Not Found." } });
                 });
             })
-            .catch(err => {
+            .catch((err) => {
               return res.status(404).json({ error: { message: "Not Found." } });
             });
         })
-        .catch(err => {
+        .catch((err) => {
           return res.status(401).json({ error: { message: "Access Denied." } });
         });
     });
@@ -225,7 +225,7 @@ export default class AppRouter {
 
       app.models.token
         .loadTokenAndUser(tokenId)
-        .then(token => {
+        .then((token) => {
           const userId = token.userId;
           const query = [
             {
@@ -268,14 +268,14 @@ export default class AppRouter {
 
           app.models.channel
             .aggregate(query)
-            .then(channels => {
+            .then((channels) => {
               return res.status(200).json(channels);
             })
-            .catch(err => {
+            .catch((err) => {
               return res.status(404).json({ error: { message: "Not Found" } });
             });
         })
-        .catch(err => {
+        .catch((err) => {
           return res.status(401).json({
             error: "Access Denied."
           });
@@ -295,13 +295,13 @@ export default class AppRouter {
 
       app.models.token
         .loadTokenAndUser(tokenId)
-        .then(token => {
+        .then((token) => {
           app.models.token.logout(token);
           return res.status(200).json({
             message: "Successfully logged out."
           });
         })
-        .catch(err => {
+        .catch((err) => {
           return res.status(401).json({ error: { message: "Access Denied." } });
         });
     });
