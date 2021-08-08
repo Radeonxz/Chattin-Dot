@@ -52,7 +52,7 @@ export default class connection {
       }
     ];
     const users = [];
-    this.app.db.collection("channel").aggregate(query, (err, results) => {
+    this.app.db.collection("channels").aggregate(query, (err, results) => {
       if (err === null && results) {
         _.each(results, (result) => {
           const uid = _.toString(_.get(result, "_id"));

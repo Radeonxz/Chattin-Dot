@@ -35,7 +35,7 @@ app.wss = new Server({
 // Connect to MongoDB
 const mongodbURI = process.env.MONGODB_URI;
 new Database()
-  .connect(mongodbURI)
+  .connect(mongodbURI, { useNewUrlParser: true })
   .then((db) => {
     console.log("Successfully connected to MongoDB");
     app.db = db;
