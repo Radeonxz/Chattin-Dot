@@ -52,7 +52,7 @@ export default class User {
         .find(query, { _id: true, name: true, created: true })
         .toArray((err, results) => {
           if (err || !results || !results.length) {
-            return reject({ messae: "User not Found" });
+            return reject({ message: "User not Found" });
           }
           return resolve(results);
         });
@@ -65,7 +65,7 @@ export default class User {
 
     return new Promise((resolve, reject) => {
       if (!password || !email || !isEmail(email)) {
-        return reject({ message: "An error occured when login" });
+        return reject({ message: "An error occurred when login" });
       }
 
       // find user by email in db
